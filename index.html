@@ -806,7 +806,7 @@
 
 <main id="main"></main>
 
-<script src="shared/content.js?v=20"></script>
+<script src="shared/content.js?v=23"></script>
 <script>
 (function() {
   const C = window.PORTFOLIO_CONTENT;
@@ -990,7 +990,7 @@
     return `
       <section id="enterprise" data-chapter="07" data-screen-label="07 Enterprise">
         <div class="kicker" data-num="07">${t(C.enterpriseCareer.kicker)}</div>
-        <h2 class="ent-heading">${t(C.enterpriseCareer.heading).replace(/다져진 시간|scale/g, m => `<em>${m}</em>`)}</h2>
+        <h2 class="ent-heading">${t(C.enterpriseCareer.heading).replace(/쌓여진 시간|shaped my capabilities/gi, m => `<em>${m}</em>`)}</h2>
         <div class="ent-list">${rows}</div>
       </section>
     `;
@@ -1053,7 +1053,7 @@
       <section id="contact" data-chapter="11" data-screen-label="11 Contact">
         <div class="kicker" data-num="11">${t(C.contact.kicker)}</div>
         <!-- contact remains chapter 13; total is still 13 including credentials -->
-        <h2 class="contact-heading">${t(C.contact.heading).replace(/만들어 볼까요|build together/g, m => `<em>${m}</em>`)}</h2>
+        <h2 class="contact-heading">${t(C.contact.heading).replace(/시작해 볼까요|get started/gi, m => `<em>${m}</em>`)}</h2>
         <div class="contact-body">${t(C.contact.body)}</div>
         <div class="contact-methods">
           <a class="contact-item" href="mailto:${C.meta.email}"><span class="lbl">Email</span><span>${C.meta.email}</span></a>

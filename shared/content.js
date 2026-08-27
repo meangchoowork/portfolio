@@ -297,7 +297,7 @@ window.PORTFOLIO_CONTENT = {
 
   enterpriseCareer: {
     kicker: { ko: 'Enterprise career', en: 'Enterprise career' },
-    heading: { ko: '역량이 다져진 시간.', en: 'The years of scale.' },
+    heading: { ko: '역량이 쌓여진 시간들', en: 'The years that shaped my capabilities.' },
     items: [
       {
         year: '2025',
@@ -427,7 +427,7 @@ window.PORTFOLIO_CONTENT = {
 
   contact: {
     kicker: { ko: 'Contact', en: 'Contact' },
-    heading: { ko: '함께 만들어 볼까요.', en: 'Let’s build together.' },
+    heading: { ko: '함께 시작해 볼까요?', en: 'Shall we get started?' },
     body: {
       ko: 'AI PM, FDE, Technical PM 포지션.\n국내외 어디든, 편하게 연락 주세요.',
       en: 'AI PM · FDE · Technical PM roles.\nAnywhere — please reach out.',
