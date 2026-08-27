@@ -40,3 +40,7 @@
 *.woff2 filter=lfs diff=lfs merge=lfs -text
 *.xz filter=lfs diff=lfs merge=lfs -text
 *.zip filter=lfs diff=lfs merge=lfs -text
+
+# Railway source builds do not fetch Git LFS objects reliably.
+# Keep portfolio card images as regular Git blobs so they render in production.
+screenshots/sites/*.jpg -filter -diff -merge -text
