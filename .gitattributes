@@ -44,3 +44,4 @@
 # Railway source builds do not fetch Git LFS objects reliably.
 # Keep portfolio card images as regular Git blobs so they render in production.
 screenshots/sites/*.jpg -filter -diff -merge -text
+assets/og-image.png -filter -diff -merge -text
