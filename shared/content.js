@@ -36,7 +36,7 @@ window.PORTFOLIO_CONTENT = {
   whyMe: {
     kicker: { ko: 'Why me', en: 'Why me' },
     heading: {
-      ko: 'AI 서비스 구축 경험이 있는 PM을\n만나기는 생각보다 어렵습니다.',
+      ko: 'AI 서비스 구축 경험이 있는\nPM을 만나기는\n생각보다 어렵습니다.',
       en: 'PMs who have actually\nshipped AI products\nare rarer than you think.',
     },
     points: [
@@ -66,7 +66,7 @@ window.PORTFOLIO_CONTENT = {
 
   capabilities: {
     kicker: { ko: 'Core capabilities', en: 'Core capabilities' },
-    heading: { ko: '최고의 역량을 보유하고 있습니다.', en: 'What I do.' },
+    heading: { ko: '최고의 역량 보유', en: 'What I do.' },
     items: [
       {
         no: '01',

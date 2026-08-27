@@ -23,7 +23,7 @@
     --content-max: 1200px;
     --content-gutter: clamp(64px, 6vw, 96px);
     --content-inline: max(var(--content-gutter), calc((100% - var(--content-max)) / 2));
-    --toc-rail: 64px;
+    --toc-rail: 128px;
     --main-inline-start: calc(var(--content-inline) + var(--toc-rail));
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -110,8 +110,8 @@
 
   /* ——— section base ——— */
   section {
-    min-height: 100vh; padding: 120px var(--content-inline) 100px var(--main-inline-start);
-    display: flex; flex-direction: column; justify-content: center;
+    min-height: auto; padding: 80px var(--content-inline) 80px var(--main-inline-start);
+    display: flex; flex-direction: column; justify-content: flex-start;
     position: relative;
   }
   section + section { border-top: 1px solid var(--line); }
@@ -156,7 +156,11 @@
   p { color: var(--ink-2); font-size: 16px; line-height: 1.75; font-weight: 400; }
 
   /* ——— hero ——— */
-  #hero { padding-top: 100px; }
+  #hero {
+    min-height: auto;
+    padding-top: 80px;
+    padding-bottom: 80px;
+  }
   .hero-marks {
     display: flex; justify-content: space-between;
     font-family: 'Pretendard Variable', 'Pretendard', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', sans-serif; font-size: 10px;
@@ -181,7 +185,7 @@
     align-self: center;
   }
   .hero-body {
-    display: grid; grid-template-columns: 1fr 1.4fr; gap: 60px;
+    display: grid; grid-template-columns: .9fr 1.5fr; gap: 60px;
     padding-top: 40px; border-top: 1px solid var(--line);
   }
   .hero-body .label {
@@ -195,7 +199,7 @@
   }
   .hero-tagline {
     font-family: 'Pretendard Variable', 'Pretendard', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', sans-serif;
-    font-size: clamp(28px, 3vw, 44px);
+    font-size: clamp(27px, 2.5vw, 32px);
     line-height: 1.25; color: var(--ink);
     font-weight: 400;
   }
@@ -203,7 +207,7 @@
 
   /* ——— vision ——— */
   .vision-heading {
-    font-size: clamp(48px, 6.5vw, 104px);
+    font-size: clamp(48px, 6.5vw, 88px);
     white-space: pre-line; margin-bottom: 40px; max-width: none;
     word-break: keep-all; line-break: strict; overflow-wrap: normal;
   }
@@ -247,7 +251,7 @@
 
   /* ——— why me ——— */
   .why-heading {
-    font-size: clamp(48px, 6.5vw, 104px);
+    font-size: clamp(48px, 6.5vw, 88px);
     white-space: pre-line; margin-bottom: 80px; max-width: none;
     word-break: keep-all; line-break: strict; overflow-wrap: normal;
   }
@@ -271,7 +275,7 @@
   .why-point p { white-space: pre-line; }
 
   /* ——— capabilities ——— */
-  .cap-heading { font-size: clamp(48px, 6.5vw, 104px); margin-bottom: 60px; }
+  .cap-heading { font-size: clamp(48px, 6.5vw, 88px); margin-bottom: 60px; }
   .cap-table {
     border-top: 1px solid var(--ink);
   }
@@ -307,7 +311,7 @@
   #vc {
     background: var(--ink);
     color: var(--paper);
-    padding: 140px var(--content-inline) 140px var(--main-inline-start);
+    padding: 80px var(--content-inline) 80px var(--main-inline-start);
   }
   #vc::before {
     content: ''; position: absolute; inset: 0;
@@ -384,7 +388,7 @@
   }
 
   /* ——— built sites (marquee) ——— */
-  .built-heading { font-size: clamp(48px, 6.5vw, 104px); margin-bottom: 24px; }
+  .built-heading { font-size: clamp(48px, 6.5vw, 88px); margin-bottom: 24px; }
   .built-sub {
     font-size: 15px; color: var(--muted); margin-bottom: 48px; max-width: 640px; line-height: 1.6;
   }
@@ -476,7 +480,7 @@
   .built-card:not(.is-internal):hover .built-url .arrow { transform: translateX(3px); }
 
   /* ——— enterprise ——— */
-  .ent-heading { font-size: clamp(48px, 6.5vw, 104px); margin-bottom: 60px; }
+  .ent-heading { font-size: clamp(48px, 6.5vw, 88px); margin-bottom: 60px; }
   .ent-list { border-top: 1px solid var(--ink); }
   .ent-row {
     display: grid; grid-template-columns: 100px 1fr 1.6fr;
@@ -509,7 +513,7 @@
   .sam-heading {
     font-size: clamp(40px, 4.5vw, 76px);
     white-space: pre-line;
-    line-height: 1.05;
+    line-height: 1.575;
     word-break: keep-all; line-break: strict; overflow-wrap: normal;
   }
   .sam-note {
@@ -526,7 +530,7 @@
   .sam-item p { font-size: 14px; color: var(--muted); line-height: 1.6; }
 
   /* ——— stack ——— */
-  .stack-heading { font-size: clamp(48px, 6.5vw, 104px); margin-bottom: 60px; }
+  .stack-heading { font-size: clamp(48px, 6.5vw, 88px); margin-bottom: 60px; }
   .stack-groups { display: grid; grid-template-columns: repeat(5, 1fr); gap: 32px; border-top: 1px solid var(--ink); padding-top: 40px; }
   .stack-group-label {
     font-family: 'Pretendard Variable', 'Pretendard', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', sans-serif; font-size: 10px;
@@ -540,7 +544,7 @@
   }
 
   /* ——— education ——— */
-  .edu-heading { font-size: clamp(48px, 6.5vw, 104px); margin-bottom: 40px; }
+  .edu-heading { font-size: clamp(48px, 6.5vw, 88px); margin-bottom: 40px; }
   .edu-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 60px; border-top: 1px solid var(--line); padding-top: 40px; }
   .edu-grid.edu-grid-2 { grid-template-columns: 2fr 1fr; gap: 80px; max-width: 1100px; }
   .edu-block h4 {
@@ -559,7 +563,7 @@
   #contact {
     background: var(--ink); color: var(--paper);
     align-items: center; text-align: center;
-    padding: 140px var(--content-inline) 140px var(--main-inline-start);
+    padding: 80px var(--content-inline) 80px var(--main-inline-start);
   }
   #contact::before {
     content: ''; position: absolute; inset: 0;
@@ -571,7 +575,7 @@
   #contact .kicker::before { color: rgba(248,245,235,.4); border-right-color: rgba(248,245,235,.15); }
   .contact-heading {
     font-family: 'Pretendard Variable', 'Pretendard', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', sans-serif; font-weight: 400;
-    font-size: clamp(56px, 9vw, 160px);
+    font-size: clamp(56px, 9vw, 140px);
     line-height: 0.95; color: var(--paper);
     margin-bottom: 40px;
   }
@@ -596,7 +600,7 @@
   }
   .contact-item .lbl { color: rgba(248,245,235,.5); font-size: 10px; text-transform: uppercase; letter-spacing: 0.2em; }
   .contact-footer {
-    position: absolute; bottom: 40px; left: var(--main-inline-start); right: var(--content-inline);
+    position: static; width: 100%; margin-top: 60px;
     display: flex; justify-content: space-between;
     font-family: 'Pretendard Variable', 'Pretendard', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', sans-serif; font-size: 10px;
     color: rgba(248,245,235,.4); letter-spacing: 0.15em; text-transform: uppercase;
@@ -604,8 +608,7 @@
 
   @media (max-width: 900px) {
     :root { --content-gutter: 6vw; --toc-rail: 0px; }
-    section { padding-top: 100px; padding-bottom: 80px; }
-    #vc, #contact { padding-top: 100px; padding-bottom: 80px; }
+    section, #vc, #contact { padding-top: 80px; padding-bottom: 80px; }
     .hero-body, .vc-hero, .sam-hero { grid-template-columns: 1fr; gap: 40px; }
     .stats { grid-template-columns: 1fr 1fr; }
     .stat { border-right: none; border-bottom: 1px solid var(--line); }
@@ -639,7 +642,7 @@
 
 <main id="main"></main>
 
-<script src="shared/content.js?v=11"></script>
+<script src="shared/content.js?v=13"></script>
 <script>
 (function() {
   const C = window.PORTFOLIO_CONTENT;
@@ -666,7 +669,6 @@
       <section id="hero" data-chapter="01" data-screen-label="01 Hero">
         <div class="hero-marks">
           <span>Portfolio · 2026</span>
-          <span>Concept B · Deep Forest</span>
           <span>Volume I</span>
         </div>
         <div class="hero-name-row">
@@ -680,7 +682,7 @@
           </div>
           <div>
             <div class="label">${isKo?'한 줄 소개':'One line'}</div>
-            <div class="hero-tagline">${isKo?'AI 서비스를 <em>실제로 만들어 본</em> PM.<br/>30년의 엔터프라이즈, 2년의 실전 AI.':'A PM who has <em>actually shipped</em> AI products.<br/>30 years of enterprise, 2 years of real AI.'}</div>
+            <div class="hero-tagline">${isKo?'AI 서비스를 <em>제일 잘 만드는</em> PM.<br/>시작부터 오픈까지 <em>책임지고 완성하는</em> PM.<br/>최고의 서비스를 <em>딜리버리하는</em> PM.':'A PM who <em>builds AI services best</em>.<br/><em>Accountable from kickoff through completion</em>.<br/>A PM who <em>delivers the best services</em>.'}</div>
           </div>
         </div>
       </section>
@@ -894,7 +896,6 @@
         </div>
         <div class="contact-footer">
           <span>© 2026 Jasmine Kim</span>
-          <span>Concept B · Deep Forest</span>
         </div>
       </section>
     `;
