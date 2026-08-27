@@ -26,6 +26,7 @@
   :root {
     --bg: #F1EEE6;
     --bg-2: #E7E3D8;
+    --bg-green: #E4EAE2;
     --paper: #F8F5EB;
     --ink: #14211A;
     --ink-2: #2E3B33;
@@ -301,6 +302,7 @@
     transition: background .3s;
     position: relative;
   }
+  .cap-row:last-child { border-bottom: none; }
   .cap-row:hover { background: var(--accent-tint); }
   .cap-row:hover .cap-no { color: var(--accent); }
   .cap-no {
@@ -388,8 +390,7 @@
   }
   .vc-tenets { display: grid; grid-template-columns: repeat(3, 1fr); gap: 60px; }
   .vc-tenet {
-    padding-top: 20px;
-    border-top: 1px solid rgba(248,245,235,.15);
+    padding-top: 0;
   }
   .vc-tenet-no {
     font-family: 'Pretendard Variable', 'Pretendard', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', sans-serif; font-size: 22px; font-style: italic;
@@ -503,6 +504,7 @@
     align-items: baseline;
     transition: all .3s;
   }
+  .ent-row:last-child { border-bottom: none; }
   .ent-row:hover { background: var(--accent-tint); }
   .ent-row:hover .ent-year { color: var(--accent); }
   .ent-year {
@@ -527,7 +529,7 @@
   .sam-heading {
     font-size: clamp(40px, 4.5vw, 76px);
     white-space: pre-line;
-    line-height: 1.575;
+    line-height: 1.2875;
     word-break: keep-all; line-break: strict; overflow-wrap: normal;
   }
   .sam-note {
@@ -620,6 +622,33 @@
     color: rgba(248,245,235,.4); letter-spacing: 0.15em; text-transform: uppercase;
   }
 
+  #vision,
+  #capabilities,
+  #built,
+  #samsung,
+  #education {
+    background: var(--bg-green);
+  }
+
+  #vc {
+    background: var(--bg);
+    color: var(--ink);
+  }
+  #vc::before { background: none; }
+  #vc .kicker { color: var(--accent); }
+  #vc .kicker::before { color: var(--muted); border-right-color: var(--line); }
+  #vc .vc-title { color: var(--ink); }
+  #vc .vc-title .italic { color: var(--accent); }
+  #vc .vc-lede { color: var(--ink-2); }
+  #vc .vc-cert { color: var(--ink-2); border-color: var(--line); }
+  #vc .vc-cert .seal { background: var(--accent); }
+  #vc .vc-badges { border-color: var(--line); }
+  #vc .vc-badge-label { color: var(--muted); }
+  #vc .vc-badge-value { color: var(--ink); }
+  #vc .vc-tenet { border-color: var(--line); }
+  #vc .vc-tenet-no { color: var(--accent); }
+  #vc .vc-tenet-body { color: var(--ink-2); }
+
   @media (max-width: 900px) {
     :root { --content-gutter: 6vw; --toc-rail: 0px; }
     section, #vc, #contact { padding-top: 80px; padding-bottom: 80px; }
@@ -676,7 +705,7 @@
     }
     .sam-heading {
       font-size: clamp(34px, 10vw, 40px);
-      line-height: 1.45;
+      line-height: 1.225;
     }
     .vision-body, .vc-lede { font-size: 18px; }
 
@@ -816,7 +845,7 @@
           </div>
           <div>
             <div class="label">${isKo?'한 줄 소개':'One line'}</div>
-            <div class="hero-tagline">${isKo?'AI 서비스를 <em>제일 잘 만드는</em> PM.<br/>시작부터 오픈까지 <em>책임지고 완성하는</em> PM.<br/>최고의 서비스를 <em>딜리버리하는</em> PM.':'A PM who <em>builds AI services best</em>.<br/><em>Accountable from kickoff through completion</em>.<br/>A PM who <em>delivers the best services</em>.'}</div>
+            <div class="hero-tagline">${isKo?'AI 서비스를 <em>제일 잘 만드는</em> PM.<br/>시작부터 오픈까지 <em>책임지고 완성하는</em> PM.<br/>최상의 결과물을 <em>딜리버리하는</em> PM.':'A PM who <em>builds AI services best</em>.<br/><em>Accountable from kickoff through completion</em>.<br/>A PM who <em>delivers the best outcomes</em>.'}</div>
           </div>
         </div>
       </section>
