@@ -22,7 +22,9 @@
     --accent-tint: rgba(47,93,63,.08);
     --content-max: 1200px;
     --content-gutter: clamp(64px, 6vw, 96px);
-    --content-inline: max(var(--content-gutter), calc((100vw - var(--content-max)) / 2));
+    --content-inline: max(var(--content-gutter), calc((100% - var(--content-max)) / 2));
+    --toc-rail: 64px;
+    --main-inline-start: calc(var(--content-inline) + var(--toc-rail));
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
   html, body {
@@ -58,9 +60,9 @@
 
   /* ——— top chrome ——— */
   .chrome {
-    position: fixed; top: 0; left: 0; right: 0; height: 60px;
+    position: fixed; top: 0; left: var(--content-inline); right: var(--content-inline); height: 60px;
     display: grid; grid-template-columns: 1fr auto 1fr;
-    align-items: center; padding: 0 32px; z-index: 100;
+    align-items: center; padding: 0; z-index: 100;
     font-family: 'Pretendard Variable', 'Pretendard', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', sans-serif; font-size: 15px;
     color: var(--muted); letter-spacing: 0.05em;
     border-bottom: 1px solid transparent;
@@ -86,7 +88,7 @@
 
   /* ——— left rail: table of contents ——— */
   .toc {
-    position: fixed; left: 24px; top: 50%; transform: translateY(-50%);
+    position: fixed; left: var(--content-inline); top: 50%; transform: translateY(-50%);
     z-index: 50; display: flex; flex-direction: column; gap: 8px;
   }
   .toc-item {
@@ -108,7 +110,7 @@
 
   /* ——— section base ——— */
   section {
-    min-height: 100vh; padding: 120px var(--content-inline) 100px;
+    min-height: 100vh; padding: 120px var(--content-inline) 100px var(--main-inline-start);
     display: flex; flex-direction: column; justify-content: center;
     position: relative;
   }
@@ -305,7 +307,7 @@
   #vc {
     background: var(--ink);
     color: var(--paper);
-    padding: 140px var(--content-inline);
+    padding: 140px var(--content-inline) 140px var(--main-inline-start);
   }
   #vc::before {
     content: ''; position: absolute; inset: 0;
@@ -388,7 +390,7 @@
   }
   .built-marquee {
     position: relative;
-    margin: 0 -6vw;
+    margin: 0;
     padding: 8px 0 24px;
     overflow: hidden;
     -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 6%, #000 94%, transparent 100%);
@@ -557,7 +559,7 @@
   #contact {
     background: var(--ink); color: var(--paper);
     align-items: center; text-align: center;
-    padding: 140px var(--content-inline);
+    padding: 140px var(--content-inline) 140px var(--main-inline-start);
   }
   #contact::before {
     content: ''; position: absolute; inset: 0;
@@ -594,21 +596,21 @@
   }
   .contact-item .lbl { color: rgba(248,245,235,.5); font-size: 10px; text-transform: uppercase; letter-spacing: 0.2em; }
   .contact-footer {
-    position: absolute; bottom: 40px; left: var(--content-inline); right: var(--content-inline);
+    position: absolute; bottom: 40px; left: var(--main-inline-start); right: var(--content-inline);
     display: flex; justify-content: space-between;
     font-family: 'Pretendard Variable', 'Pretendard', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', sans-serif; font-size: 10px;
     color: rgba(248,245,235,.4); letter-spacing: 0.15em; text-transform: uppercase;
   }
 
   @media (max-width: 900px) {
-    :root { --content-gutter: 6vw; }
+    :root { --content-gutter: 6vw; --toc-rail: 0px; }
     section { padding-top: 100px; padding-bottom: 80px; }
     #vc, #contact { padding-top: 100px; padding-bottom: 80px; }
     .hero-body, .vc-hero, .sam-hero { grid-template-columns: 1fr; gap: 40px; }
     .stats { grid-template-columns: 1fr 1fr; }
     .stat { border-right: none; border-bottom: 1px solid var(--line); }
     .why-points, .stack-groups, .sam-grid, .vc-badges, .vc-tenets, .edu-grid { grid-template-columns: 1fr 1fr; }
-    .built-marquee { margin: 0 -6vw; }
+    .built-marquee { margin: 0; }
     .built-card { flex: 0 0 280px; }
     .why-point, .cap-row, .ent-row { grid-template-columns: 60px 1fr; gap: 20px; }
     .why-point p, .cap-body, .ent-body { grid-column: 2; }
