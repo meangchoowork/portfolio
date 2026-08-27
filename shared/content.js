@@ -17,11 +17,11 @@ window.PORTFOLIO_CONTENT = {
   vision: {
     kicker: { ko: 'Vision', en: 'Vision' },
     heading: {
-      ko: 'AI를 “사용하는” PM이 아니라,\nAI 서비스를 “리딩하는” PM.',
-      en: 'Not a PM who "uses" AI —\na PM who builds AI products.',
+      ko: 'AI를 “사용하는” PM 에서\nAI 서비스를 “리딩하는” PM 으로.',
+      en: 'From a PM who "uses" AI\nto a PM who leads AI services.',
     },
     body: {
-      ko: 'AI 활용법을 아는 PM은 많습니다.\n하지만 LLM·RAG·Vector Search 위에서 실제 서비스를 설계하고\nPoC부터 글로벌 확산까지 책임진 PM은 드뭅니다.\n30년의 엔터프라이즈 경험 위에, AI 서비스 구축의 실전이 얹혀 있습니다.',
+      ko: 'AI 활용법을 아는 PM은 많습니다.\n하지만 LLM·RAG·Vector Search 위에서 실제 서비스를 설계하고\nPoC부터 글로벌 확산까지 책임질 수 있는 PM은 많지 않습니다.\n30년의 엔터프라이즈 경험 위에, AI 서비스 구축의 실전이 더해져 있습니다.',
       en: 'Many PMs know how to use AI.\nFew have designed real products on LLM · RAG · Vector Search,\nand owned them from PoC to global rollout.\nThree decades of enterprise, layered with real AI shipping.',
     },
   },
@@ -36,8 +36,8 @@ window.PORTFOLIO_CONTENT = {
   whyMe: {
     kicker: { ko: 'Why me', en: 'Why me' },
     heading: {
-      ko: 'AI 서비스 구축 경험이 있는\nPM을 만나기는\n생각보다 어렵습니다.',
-      en: 'PMs who have actually\nshipped AI products\nare rarer than you think.',
+      ko: '잘 만났다!\nAI 서비스 구축 경험이 있는 베테랑 PM.',
+      en: 'You found the right person.\nA veteran PM with real AI delivery experience.',
     },
     points: [
       {
@@ -129,8 +129,8 @@ window.PORTFOLIO_CONTENT = {
     badges: [
       { label: { ko: '저작권 등록번호', en: 'Copyright No.' }, value: 'C-2026-015049' },
       { label: { ko: '발행처', en: 'Registrar' }, value: { ko: '한국저작권위원회', en: 'Korea Copyright Commission' } },
-      { label: { ko: '특허', en: 'Patent' }, value: { ko: '출원 중', en: 'Pending' } },
       { label: { ko: '저자', en: 'Author' }, value: { ko: '김일석', en: 'Jasmine Kim' } },
+      { label: { ko: '특허', en: 'Patent' }, value: { ko: '출원 중', en: 'Pending' } },
     ],
     tenets: [
       {

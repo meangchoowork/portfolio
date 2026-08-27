@@ -277,6 +277,7 @@
     align-items: baseline;
     transition: padding-left .3s;
   }
+  .why-point:last-child { border-bottom: none; padding-bottom: 0; }
   .why-point:hover { padding-left: 24px; background: var(--accent-tint); }
   .why-point-no {
     font-family: 'Pretendard Variable', 'Pretendard', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', sans-serif; font-size: 28px;
@@ -504,7 +505,7 @@
     align-items: baseline;
     transition: all .3s;
   }
-  .ent-row:last-child { border-bottom: none; }
+  .ent-row:last-child { border-bottom: none; padding-bottom: 0; }
   .ent-row:hover { background: var(--accent-tint); }
   .ent-row:hover .ent-year { color: var(--accent); }
   .ent-year {
@@ -805,7 +806,7 @@
 
 <main id="main"></main>
 
-<script src="shared/content.js?v=14"></script>
+<script src="shared/content.js?v=20"></script>
 <script>
 (function() {
   const C = window.PORTFOLIO_CONTENT;
@@ -836,7 +837,7 @@
         </div>
         <div class="hero-name-row">
           <div class="hero-name">${isKo?'김일석':'Jasmine <span class="italic">Kim</span>'}</div>
-          <div class="hero-badge">Available for hire · ${isKo?'상담 가능':'Open to talk'}</div>
+          <div class="hero-badge">Open to roles &amp; projects</div>
         </div>
         <div class="hero-body">
           <div>
@@ -873,7 +874,7 @@
     return `
       <section id="why" data-chapter="03" data-screen-label="03 Why me">
         <div class="kicker" data-num="03">${t(C.whyMe.kicker)}</div>
-        <h2 class="why-heading">${t(C.whyMe.heading).replace(/어렵습니다|rarer than you think/g, m => `<em>${m}</em>`)}</h2>
+        <h2 class="why-heading">${t(C.whyMe.heading).replace(/잘 만났다!|베테랑 PM|right person|veteran PM/gi, m => `<em>${m}</em>`)}</h2>
         <div class="why-points">${points}</div>
       </section>
     `;
