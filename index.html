@@ -426,26 +426,29 @@
   .built-card.is-internal:hover { transform: none; border-color: var(--line); box-shadow: none; }
   .built-thumb {
     aspect-ratio: 16 / 10;
-    background-size: cover;
-    background-position: top center;
     position: relative;
     display: flex; align-items: flex-end; justify-content: flex-start;
     padding: 16px;
     overflow: hidden;
-    transition: background-position 6s ease-out;
   }
-  .built-card:hover .built-thumb {
-    background-position: bottom center;
+  .built-thumb-img {
+    position: absolute; inset: 0;
+    width: 100%; height: 100%;
+    object-fit: cover; object-position: top center;
+    transition: object-position 6s ease-out;
+  }
+  .built-card:hover .built-thumb-img {
+    object-position: bottom center;
   }
   .built-thumb::after {
     content: '';
     position: absolute; inset: 0;
     background:
       linear-gradient(180deg, rgba(0,0,0,0.28) 0%, transparent 22%, transparent 60%, rgba(0,0,0,0.35) 100%);
-    pointer-events: none;
+    pointer-events: none; z-index: 1;
   }
   .built-thumb-mark {
-    position: relative; z-index: 1;
+    position: relative; z-index: 2;
     font-size: 12px; letter-spacing: 0.16em; text-transform: uppercase;
     color: rgba(255,255,255,0.95); font-weight: 500;
     text-shadow: 0 1px 8px rgba(0,0,0,0.5);
@@ -634,7 +637,7 @@
 
 <main id="main"></main>
 
-<script src="shared/content.js?v=10"></script>
+<script src="shared/content.js?v=11"></script>
 <script>
 (function() {
   const C = window.PORTFOLIO_CONTENT;
@@ -765,13 +768,17 @@
         ? 'class="built-card is-internal"'
         : `class="built-card" href="${s.href}" target="_blank" rel="noopener"`;
       const thumbStyle = s.img
-        ? `--tint1:${s.tint};--tint2:${s.tint2};background-image:url('${s.img}');background-color:${s.tint};`
+        ? `--tint1:${s.tint};--tint2:${s.tint2};background-color:${s.tint};`
         : `--tint1:${s.tint};--tint2:${s.tint2};background-image:linear-gradient(135deg, ${s.tint}, ${s.tint2});`;
+      const thumbImage = s.img
+        ? `<img class="built-thumb-img" src="${s.img}?v=11" alt="${t(s.name)} 프로젝트 화면" loading="lazy" decoding="async">`
+        : '';
       const urlText = typeof s.url === 'string' ? s.url : t(s.url);
       const arrow = isInternal ? '' : '<span class="arrow">→</span>';
       return `
         <${tag} ${attrs}>
           <div class="built-thumb" style="${thumbStyle}">
+            ${thumbImage}
             <div class="built-thumb-mark">${t(s.name)}</div>
           </div>
           <div class="built-body">
