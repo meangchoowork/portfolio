@@ -1,0 +1,889 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>김일석 — Forward Deployed AI Engineer · Technical PM</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght,SOFT,WONK@9..144,300..900,0..100,0..1&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --bg: #F3EDE1;
+    --bg-2: #EBE2D0;
+    --ink: #1B1613;
+    --ink-2: #3D332C;
+    --muted: #7B6E62;
+    --line: #C9BEAC;
+    --accent: #C24B25;         /* terracotta */
+    --accent-2: #8A2A11;
+    --paper: #FBF7EE;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: 'Manrope', -apple-system, sans-serif;
+    font-weight: 400;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    overflow-x: hidden;
+  }
+  a { color: inherit; text-decoration: none; }
+  body { cursor: none; }
+  @media (hover: none) { body { cursor: auto; } .cursor { display: none !important; } }
+
+  /* ——— cursor ——— */
+  .cursor {
+    position: fixed; top: 0; left: 0; width: 10px; height: 10px;
+    background: var(--accent); border-radius: 50%;
+    pointer-events: none; z-index: 9999;
+    transform: translate(-50%, -50%);
+    transition: transform .15s ease, background .2s ease, width .2s ease, height .2s ease;
+    mix-blend-mode: multiply;
+  }
+  .cursor.hover { width: 44px; height: 44px; background: transparent; border: 1.5px solid var(--accent); }
+  .cursor-ring {
+    position: fixed; top: 0; left: 0; width: 36px; height: 36px;
+    border: 1px solid rgba(194,75,37,.3); border-radius: 50%;
+    pointer-events: none; z-index: 9998;
+    transform: translate(-50%, -50%);
+    transition: transform .35s cubic-bezier(.2,.6,.2,1);
+  }
+
+  /* ——— top chrome ——— */
+  .chrome {
+    position: fixed; top: 0; left: 0; right: 0; height: 56px;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 32px; z-index: 100;
+    font-family: 'JetBrains Mono', monospace; font-size: 11px;
+    color: var(--muted); letter-spacing: 0.08em; text-transform: uppercase;
+    mix-blend-mode: multiply;
+  }
+  .chrome .brand { color: var(--ink); font-weight: 500; }
+  .chrome .brand em { color: var(--accent); font-style: normal; }
+  .chrome .right { display: flex; gap: 24px; align-items: center; }
+  .chapter-counter { font-variant-numeric: tabular-nums; }
+  .chapter-counter em { color: var(--ink); font-style: normal; font-weight: 600; }
+  .lang-toggle {
+    display: inline-flex; gap: 2px; padding: 3px;
+    background: rgba(27,22,19,.06); border-radius: 999px;
+  }
+  .lang-toggle button {
+    all: unset; cursor: none; padding: 4px 10px; border-radius: 999px;
+    font-family: 'JetBrains Mono', monospace; font-size: 10px;
+    letter-spacing: 0.1em; color: var(--muted);
+  }
+  .lang-toggle button.active { background: var(--ink); color: var(--paper); }
+
+  /* ——— scroll progress bar ——— */
+  .progress {
+    position: fixed; top: 0; left: 0; height: 2px; background: var(--accent);
+    z-index: 101; transition: width .1s linear;
+  }
+
+  /* ——— section base ——— */
+  section {
+    min-height: 100vh; padding: 120px 8vw 100px;
+    display: flex; flex-direction: column; justify-content: center;
+    position: relative;
+    border-bottom: 1px solid transparent;
+  }
+  section:not(:last-child)::after {
+    content: ''; position: absolute; bottom: 0; left: 8vw; right: 8vw;
+    height: 1px; background: linear-gradient(90deg, transparent, var(--line), transparent);
+  }
+  .kicker {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 24px;
+    display: flex; align-items: center; gap: 12px;
+  }
+  .kicker::before {
+    content: ''; display: inline-block; width: 24px; height: 1px; background: var(--accent);
+  }
+  h1, h2, h3 {
+    font-family: 'Fraunces', serif;
+    font-weight: 300;
+    letter-spacing: -0.02em;
+    line-height: 1;
+    color: var(--ink);
+    font-variation-settings: "SOFT" 30, "opsz" 144;
+  }
+  h1 em, h2 em, h3 em {
+    font-style: italic; color: var(--accent);
+    font-variation-settings: "SOFT" 100, "opsz" 144;
+  }
+  :lang(ko) h1, :lang(ko) h2, :lang(ko) h3,
+  :lang(ko) .hero-tagline, :lang(ko) p {
+    word-break: keep-all; line-break: strict; overflow-wrap: normal;
+  }
+  p { color: var(--ink-2); font-size: 17px; line-height: 1.65; }
+  .lede { font-family: 'Instrument Serif', serif; font-size: clamp(24px, 2.4vw, 32px); line-height: 1.35; color: var(--ink-2); font-weight: 400; }
+
+  /* ——— hero ——— */
+  #hero { padding-top: 120px; }
+  .hero-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: end;
+  }
+  .hero-name {
+    font-size: clamp(80px, 13vw, 220px);
+    line-height: 0.85;
+    margin-bottom: 40px;
+    font-weight: 300;
+  }
+  .hero-name .last {
+    display: block; padding-left: 0.5em;
+    font-style: italic;
+    font-variation-settings: "SOFT" 100, "opsz" 144;
+  }
+  .hero-meta { padding-bottom: 20px; }
+  .hero-position {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px; letter-spacing: 0.1em;
+    color: var(--muted); text-transform: uppercase;
+    margin-bottom: 24px;
+  }
+  .hero-tagline {
+    font-family: 'Instrument Serif', serif;
+    font-size: clamp(28px, 3vw, 42px);
+    line-height: 1.2; color: var(--ink);
+    font-style: italic;
+  }
+  .hero-tagline .accent-dot {
+    display: inline-block; width: 10px; height: 10px;
+    background: var(--accent); border-radius: 50%;
+    vertical-align: middle; margin: 0 4px 6px 4px;
+  }
+  .hero-scroll-hint {
+    position: absolute; bottom: 40px; left: 8vw; right: 8vw;
+    display: flex; justify-content: space-between; align-items: center;
+    font-family: 'JetBrains Mono', monospace; font-size: 10px;
+    letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted);
+  }
+  .hero-scroll-hint .line { flex: 1; height: 1px; background: var(--line); margin: 0 20px; }
+
+  /* corner marks */
+  .corner {
+    position: absolute; font-family: 'JetBrains Mono', monospace;
+    font-size: 10px; letter-spacing: 0.15em; color: var(--muted); text-transform: uppercase;
+  }
+  .corner-tl { top: 80px; left: 8vw; }
+  .corner-tr { top: 80px; right: 8vw; text-align: right; }
+
+  /* ——— vision ——— */
+  .vision-body { max-width: 900px; margin-top: 60px; }
+  .vision-body h2 {
+    font-size: clamp(48px, 6.5vw, 108px);
+    white-space: pre-line;
+    margin-bottom: 40px;
+    word-break: keep-all; line-break: strict; overflow-wrap: normal;
+  }
+  .vision-body p {
+    white-space: pre-line;
+    font-family: 'Instrument Serif', serif;
+    font-size: clamp(20px, 1.6vw, 26px);
+    line-height: 1.5;
+    color: var(--ink-2);
+  }
+
+  /* ——— stats ——— */
+  .stats-heading { font-size: clamp(40px, 5vw, 80px); margin-bottom: 80px; max-width: 800px; }
+  .stats {
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 40px;
+    border-top: 1px solid var(--line); padding-top: 40px;
+  }
+  .stat-num {
+    font-family: 'Fraunces', serif; font-weight: 300;
+    font-size: clamp(64px, 8vw, 140px);
+    line-height: 0.9; color: var(--ink);
+    font-variation-settings: "SOFT" 50, "opsz" 144;
+  }
+  .stat-num.accent { color: var(--accent); font-style: italic; font-variation-settings: "SOFT" 100, "opsz" 144; }
+  .stat-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px; letter-spacing: 0.15em; text-transform: uppercase;
+    color: var(--ink-2); margin-top: 12px;
+  }
+  .stat-note { font-size: 13px; color: var(--muted); margin-top: 4px; font-family: 'Manrope', sans-serif; letter-spacing: 0; text-transform: none; }
+
+  /* ——— why me ——— */
+  .why-heading {
+    font-size: clamp(48px, 6.5vw, 108px);
+    white-space: pre-line;
+    margin-bottom: 80px;
+    max-width: 1200px;
+  }
+  .why-points { display: grid; grid-template-columns: repeat(3, 1fr); gap: 40px; }
+  .why-point {
+    padding: 32px 28px;
+    background: var(--paper); border: 1px solid var(--line);
+    border-radius: 4px;
+    transition: transform .4s cubic-bezier(.2,.6,.2,1), box-shadow .4s;
+    position: relative;
+  }
+  .why-point:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 20px 50px -20px rgba(194,75,37,.25);
+    border-color: var(--accent);
+  }
+  .why-point-no {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px; letter-spacing: 0.15em; color: var(--accent);
+    margin-bottom: 20px;
+  }
+  .why-point h3 {
+    font-family: 'Fraunces', serif;
+    font-size: 26px; line-height: 1.2; margin-bottom: 16px;
+    font-weight: 400;
+  }
+  .why-point p { font-size: 15px; white-space: pre-line; }
+
+  /* ——— capabilities ——— */
+  .cap-heading { font-size: clamp(48px, 6.5vw, 108px); margin-bottom: 80px; }
+  .cap-list { border-top: 1px solid var(--line); }
+  .cap-row {
+    display: grid; grid-template-columns: 80px 160px 1fr 1.5fr;
+    gap: 40px; align-items: baseline;
+    padding: 40px 0;
+    border-bottom: 1px solid var(--line);
+    transition: padding .3s ease, background .3s ease;
+    position: relative;
+  }
+  .cap-row:hover {
+    padding-left: 20px;
+    background: linear-gradient(90deg, rgba(194,75,37,.06), transparent);
+  }
+  .cap-row:hover .cap-no { color: var(--accent); }
+  .cap-no {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px; color: var(--muted); letter-spacing: 0.1em;
+    transition: color .3s;
+  }
+  .cap-tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--accent); padding-top: 4px;
+  }
+  .cap-title {
+    font-family: 'Fraunces', serif;
+    font-size: clamp(22px, 2vw, 30px); line-height: 1.2;
+    font-weight: 400; color: var(--ink);
+  }
+  .cap-body { font-size: 15px; color: var(--muted); white-space: pre-line; line-height: 1.6; }
+
+  /* ——— VC-Framework (독립 큰 섹션) ——— */
+  #vc { background: var(--ink); color: var(--paper); padding: 140px 8vw; }
+  #vc::after { display: none; }
+  #vc .kicker { color: #E89478; }
+  #vc .kicker::before { background: #E89478; }
+  #vc .chrome-inv, #vc .corner { color: rgba(251,247,238,.5); }
+  .vc-hero { display: grid; grid-template-columns: 1.8fr 1fr; gap: 60px; align-items: end; margin-bottom: 100px; }
+  .vc-title {
+    font-family: 'Fraunces', serif; font-weight: 300;
+    font-size: clamp(56px, 6.5vw, 100px);
+    line-height: 0.9; color: var(--paper);
+    letter-spacing: -0.03em;
+    white-space: pre-line;
+    word-break: keep-all; line-break: strict; overflow-wrap: normal;
+    font-variation-settings: "SOFT" 30, "opsz" 144;
+  }
+  .vc-title .italic { font-style: italic; color: #E89478; font-variation-settings: "SOFT" 100, "opsz" 144; }
+  .vc-lede {
+    font-family: 'Instrument Serif', serif;
+    font-size: clamp(20px, 1.8vw, 28px);
+    line-height: 1.45;
+    color: rgba(251,247,238,.85);
+    white-space: pre-line;
+    padding-bottom: 20px;
+  }
+  .vc-badges {
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 32px;
+    border-top: 1px solid rgba(251,247,238,.15);
+    border-bottom: 1px solid rgba(251,247,238,.15);
+    padding: 40px 0; margin-bottom: 80px;
+  }
+  .vc-badge-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase;
+    color: rgba(251,247,238,.55); margin-bottom: 12px;
+  }
+  .vc-badge-value {
+    font-family: 'Fraunces', serif; font-size: 22px; line-height: 1.2;
+    color: var(--paper); font-weight: 400;
+  }
+  .vc-tenets { display: grid; grid-template-columns: repeat(3, 1fr); gap: 60px; }
+  .vc-tenet {
+    font-family: 'Instrument Serif', serif;
+    font-size: 22px; line-height: 1.45;
+    color: rgba(251,247,238,.9);
+    border-left: 2px solid #E89478;
+    padding-left: 20px;
+  }
+  .vc-tenet-no {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px; letter-spacing: 0.2em; color: #E89478;
+    display: block; margin-bottom: 12px;
+  }
+
+  /* ——— now ——— */
+  .now-header { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 60px; }
+  .now-heading { font-size: clamp(48px, 6.5vw, 108px); }
+  .now-range { font-family: 'JetBrains Mono', monospace; font-size: 12px; letter-spacing: 0.1em; color: var(--muted); }
+  .now-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 40px; }
+  .now-item {
+    padding: 32px; background: var(--paper);
+    border: 1px solid var(--line); border-radius: 4px;
+    transition: all .3s;
+    position: relative; overflow: hidden;
+  }
+  .now-item::before {
+    content: ''; position: absolute; top: 0; left: 0; width: 4px; height: 100%;
+    background: var(--accent); transform: scaleY(0); transform-origin: top;
+    transition: transform .4s cubic-bezier(.2,.6,.2,1);
+  }
+  .now-item:hover::before { transform: scaleY(1); }
+  .now-item:hover { padding-left: 40px; }
+  .now-item h3 {
+    font-family: 'Fraunces', serif; font-size: 26px; line-height: 1.2;
+    margin-bottom: 12px; font-weight: 400;
+  }
+  .now-item p { font-size: 15px; color: var(--muted); }
+
+  /* ——— built sites ——— */
+  .built-heading { font-size: clamp(48px, 6.5vw, 108px); margin-bottom: 60px; }
+  .built-list { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; }
+  .built-card {
+    padding: 28px 24px;
+    background: var(--paper); border: 1px solid var(--line);
+    border-radius: 4px; transition: all .4s;
+    position: relative;
+    display: flex; flex-direction: column; gap: 12px;
+    min-height: 200px;
+  }
+  .built-card:hover {
+    background: var(--ink); color: var(--paper);
+    transform: translateY(-4px);
+    border-color: var(--ink);
+  }
+  .built-card:hover .built-url { color: #E89478; }
+  .built-card:hover .built-desc { color: rgba(251,247,238,.7); }
+  .built-num {
+    font-family: 'JetBrains Mono', monospace; font-size: 10px;
+    letter-spacing: 0.2em; color: var(--muted);
+  }
+  .built-name {
+    font-family: 'Fraunces', serif; font-size: 32px; line-height: 1;
+    font-weight: 400; letter-spacing: -0.02em;
+  }
+  .built-url {
+    font-family: 'JetBrains Mono', monospace; font-size: 11px;
+    color: var(--accent); letter-spacing: 0.05em;
+  }
+  .built-desc { font-size: 13px; color: var(--muted); margin-top: auto; line-height: 1.5; }
+
+  /* ——— enterprise career ——— */
+  .ent-heading { font-size: clamp(48px, 6.5vw, 108px); margin-bottom: 60px; }
+  .ent-list { border-top: 1px solid var(--line); }
+  .ent-row {
+    display: grid; grid-template-columns: 100px 1fr 1.5fr;
+    gap: 40px; padding: 32px 0;
+    border-bottom: 1px solid var(--line);
+    align-items: baseline;
+    transition: all .3s;
+  }
+  .ent-row:hover { padding-left: 20px; }
+  .ent-row:hover .ent-year { color: var(--accent); }
+  .ent-year {
+    font-family: 'Fraunces', serif; font-size: 32px;
+    color: var(--muted); font-weight: 300;
+    font-variation-settings: "opsz" 144;
+    transition: color .3s;
+  }
+  .ent-company {
+    font-family: 'Fraunces', serif; font-size: 26px; line-height: 1.2;
+    font-weight: 400; margin-bottom: 6px;
+  }
+  .ent-role {
+    font-family: 'JetBrains Mono', monospace; font-size: 11px;
+    letter-spacing: 0.1em; color: var(--muted); text-transform: uppercase;
+  }
+  .ent-body { font-size: 15px; color: var(--ink-2); line-height: 1.6; }
+  .ent-period { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--muted); margin-top: 6px; display: block; }
+
+  /* ——— samsung era ——— */
+  #samsung { background: var(--bg-2); }
+  .sam-hero { display: grid; grid-template-columns: 1.7fr 1fr; gap: 60px; align-items: end; margin-bottom: 80px; }
+  .sam-heading {
+    font-size: clamp(40px, 4.5vw, 76px);
+    white-space: pre-line;
+    line-height: 1.05;
+    word-break: keep-all; line-break: strict; overflow-wrap: normal;
+  }
+  .sam-note {
+    font-family: 'Instrument Serif', serif;
+    font-size: 22px; line-height: 1.5; color: var(--ink-2);
+    padding-bottom: 20px;
+  }
+  .sam-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px; }
+  .sam-item {
+    padding-top: 24px; border-top: 1px solid var(--line);
+  }
+  .sam-item h4 {
+    font-family: 'Fraunces', serif; font-size: 20px; line-height: 1.3;
+    font-weight: 500; margin-bottom: 10px; color: var(--ink);
+  }
+  .sam-item p { font-size: 14px; color: var(--muted); line-height: 1.55; }
+
+  /* ——— stack ——— */
+  .stack-heading { font-size: clamp(48px, 6.5vw, 108px); margin-bottom: 60px; }
+  .stack-groups { display: grid; grid-template-columns: repeat(5, 1fr); gap: 32px; border-top: 1px solid var(--line); padding-top: 40px; }
+  .stack-group-label {
+    font-family: 'JetBrains Mono', monospace; font-size: 10px;
+    letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--accent); margin-bottom: 20px;
+  }
+  .stack-items { display: flex; flex-direction: column; gap: 10px; }
+  .stack-item {
+    font-family: 'Fraunces', serif; font-size: 18px; color: var(--ink);
+    font-weight: 400; line-height: 1.3;
+  }
+
+  /* ——— education ——— */
+  .edu-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 60px; }
+  .edu-heading { font-size: clamp(48px, 6.5vw, 108px); grid-column: 1 / -1; margin-bottom: 40px; }
+  .edu-block h4 {
+    font-family: 'JetBrains Mono', monospace; font-size: 11px;
+    letter-spacing: 0.15em; text-transform: uppercase;
+    color: var(--accent); margin-bottom: 20px;
+  }
+  .edu-item {
+    padding: 14px 0; border-bottom: 1px solid var(--line);
+    display: flex; justify-content: space-between; align-items: baseline; gap: 20px;
+  }
+  .edu-item .name { font-family: 'Fraunces', serif; font-size: 17px; font-weight: 400; }
+  .edu-item .meta { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--muted); letter-spacing: 0.1em; }
+
+  /* ——— contact ——— */
+  #contact { background: var(--ink); color: var(--paper); text-align: center; align-items: center; }
+  #contact::after { display: none; }
+  #contact .kicker { color: #E89478; justify-content: center; }
+  #contact .kicker::before { background: #E89478; }
+  .contact-heading {
+    font-family: 'Fraunces', serif; font-weight: 300;
+    font-size: clamp(56px, 9vw, 160px);
+    line-height: 0.95; color: var(--paper);
+    margin-bottom: 40px;
+    font-variation-settings: "SOFT" 40, "opsz" 144;
+  }
+  .contact-heading em { color: #E89478; font-style: italic; font-variation-settings: "SOFT" 100, "opsz" 144; }
+  .contact-body {
+    font-family: 'Instrument Serif', serif; font-size: 24px; line-height: 1.5;
+    color: rgba(251,247,238,.8); margin-bottom: 60px; white-space: pre-line;
+  }
+  .contact-methods {
+    display: inline-flex; flex-direction: column; gap: 20px; align-items: center;
+  }
+  .contact-item {
+    display: inline-flex; align-items: center; gap: 20px;
+    font-family: 'JetBrains Mono', monospace; font-size: 14px;
+    color: var(--paper); letter-spacing: 0.05em;
+    padding: 12px 28px; border: 1px solid rgba(251,247,238,.2);
+    border-radius: 999px; transition: all .3s;
+  }
+  .contact-item:hover {
+    background: #E89478; color: var(--ink); border-color: #E89478;
+  }
+  .contact-item .lbl { color: rgba(251,247,238,.5); font-size: 10px; text-transform: uppercase; letter-spacing: 0.2em; }
+  .contact-footer {
+    position: absolute; bottom: 40px; left: 8vw; right: 8vw;
+    display: flex; justify-content: space-between;
+    font-family: 'JetBrains Mono', monospace; font-size: 10px;
+    color: rgba(251,247,238,.4); letter-spacing: 0.15em; text-transform: uppercase;
+  }
+
+  /* small screens */
+  @media (max-width: 900px) {
+    section { padding: 100px 6vw 80px; }
+    .hero-grid, .vc-hero, .sam-hero { grid-template-columns: 1fr; gap: 40px; }
+    .stats, .why-points, .now-grid, .built-list, .stack-groups, .sam-grid, .vc-badges, .vc-tenets, .edu-grid { grid-template-columns: 1fr 1fr; }
+    .cap-row { grid-template-columns: 60px 1fr; gap: 20px; }
+    .cap-tag, .cap-body { grid-column: 2; }
+    .ent-row { grid-template-columns: 60px 1fr; gap: 20px; }
+    .ent-body { grid-column: 2; }
+  }
+</style>
+</head>
+<body>
+
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+<div class="progress" id="progress" style="width:0"></div>
+
+<div class="chrome">
+  <div class="brand">ILSUK <em>·</em> KIM</div>
+  <div class="right">
+    <span class="chapter-counter"><em id="chapterNum">01</em> / <span id="chapterTotal">13</span></span>
+    <span class="lang-toggle">
+      <button data-lang="ko" class="active">KO</button>
+      <button data-lang="en">EN</button>
+    </span>
+  </div>
+</div>
+
+<main id="main"></main>
+
+<script src="shared/content.js"></script>
+<script>
+(function() {
+  const C = window.PORTFOLIO_CONTENT;
+  let lang = localStorage.getItem('ilsuk_lang') || 'ko';
+
+  const t = (v) => (v && typeof v === 'object' && (v.ko || v.en)) ? (v[lang] || v.ko || v.en) : v;
+
+  function renderHero() {
+    return `
+      <section id="hero" data-chapter="01" data-screen-label="01 Hero">
+        <div class="corner corner-tl">Portfolio · 2026</div>
+        <div class="corner corner-tr">Concept A · Terracotta</div>
+        <div class="hero-grid">
+          <div>
+            <h1 class="hero-name">
+              <span class="first" data-k="hero.first">${lang==='ko'?'김일':'Il &nbsp;'}</span><span class="last" data-k="hero.last">${lang==='ko'?'석':'suk Kim'}</span>
+            </h1>
+          </div>
+          <div class="hero-meta">
+            <div class="hero-position" data-k="hero.pos">${t(C.meta.position)}</div>
+            <div class="hero-tagline" data-k="hero.tag">${lang==='ko'?'AI 서비스를 <span class="accent-dot"></span> <em>실제로 만들어 본</em> PM.':'A PM who has <span class="accent-dot"></span> <em>actually shipped</em> AI products.'}</div>
+          </div>
+        </div>
+        <div class="hero-scroll-hint">
+          <span>Scroll to enter</span>
+          <span class="line"></span>
+          <span>13 chapters</span>
+        </div>
+      </section>
+    `;
+  }
+
+  function renderVision() {
+    return `
+      <section id="vision" data-chapter="02" data-screen-label="02 Vision">
+        <div class="kicker">${t(C.vision.kicker)}</div>
+        <div class="vision-body">
+          <h2 data-k="vision.h">${t(C.vision.heading).replace(/AI 서비스를 “만드는” PM|AI products/g, m => `<em>${m}</em>`)}</h2>
+          <p data-k="vision.b">${t(C.vision.body)}</p>
+        </div>
+      </section>
+    `;
+  }
+
+  function renderStats() {
+    const items = C.stats.map((s, i) => `
+      <div class="stat">
+        <div class="stat-num ${i===1||i===3?'accent':''}">${s.value}</div>
+        <div class="stat-label">${t(s.label)}</div>
+        <div class="stat-note">${t(s.note)}</div>
+      </div>
+    `).join('');
+    return `
+      <section id="glance" data-chapter="03" data-screen-label="03 At a glance">
+        <div class="kicker">At a glance</div>
+        <h2 class="stats-heading">${lang==='ko'?'숫자로 <em>먼저</em>.':'The <em>numbers</em> first.'}</h2>
+        <div class="stats">${items}</div>
+      </section>
+    `;
+  }
+
+  function renderWhy() {
+    const points = C.whyMe.points.map((p, i) => `
+      <div class="why-point">
+        <div class="why-point-no">/ 0${i+1}</div>
+        <h3>${t(p.title)}</h3>
+        <p>${t(p.body)}</p>
+      </div>
+    `).join('');
+    return `
+      <section id="why" data-chapter="04" data-screen-label="04 Why me">
+        <div class="kicker">${t(C.whyMe.kicker)}</div>
+        <h2 class="why-heading">${t(C.whyMe.heading).replace(/드뭅니다|rarer than you think/g, m => `<em>${m}</em>`)}</h2>
+        <div class="why-points">${points}</div>
+      </section>
+    `;
+  }
+
+  function renderCapabilities() {
+    const rows = C.capabilities.items.map(item => `
+      <div class="cap-row">
+        <div class="cap-no">${item.no}</div>
+        <div class="cap-tag">${t(item.tag)}</div>
+        <div class="cap-title">${t(item.title)}</div>
+        <div class="cap-body">${t(item.body)}</div>
+      </div>
+    `).join('');
+    return `
+      <section id="capabilities" data-chapter="05" data-screen-label="05 Capabilities">
+        <div class="kicker">${t(C.capabilities.kicker)}</div>
+        <h2 class="cap-heading">${t(C.capabilities.heading).replace(/합니다|do/g, m => `<em>${m}</em>`)}</h2>
+        <div class="cap-list">${rows}</div>
+      </section>
+    `;
+  }
+
+  function renderVC() {
+    const badges = C.vc.badges.map(b => `
+      <div class="vc-badge">
+        <div class="vc-badge-label">${t(b.label)}</div>
+        <div class="vc-badge-value">${t(b.value)}</div>
+      </div>
+    `).join('');
+    const tenets = C.vc.tenets.map((tn, i) => `
+      <div class="vc-tenet">
+        <span class="vc-tenet-no">/ 0${i+1}</span>
+        ${t(tn)}
+      </div>
+    `).join('');
+    return `
+      <section id="vc" data-chapter="06" data-screen-label="06 VC-Framework">
+        <div class="kicker">${t(C.vc.kicker)}</div>
+        <div class="vc-hero">
+          <h2 class="vc-title">${t(C.vc.heading).replace(/Vibe Coding/g, '<span class="italic">Vibe Coding</span>')}</h2>
+          <div class="vc-lede">${t(C.vc.lede)}</div>
+        </div>
+        <div class="vc-badges">${badges}</div>
+        <div class="vc-tenets">${tenets}</div>
+      </section>
+    `;
+  }
+
+  function renderNow() {
+    const items = C.now.items.map(item => `
+      <div class="now-item">
+        <h3>${t(item.title)}</h3>
+        <p>${t(item.body)}</p>
+      </div>
+    `).join('');
+    return `
+      <section id="now" data-chapter="07" data-screen-label="07 Now">
+        <div class="kicker">${t(C.now.kicker)}</div>
+        <div class="now-header">
+          <h2 class="now-heading">${t(C.now.heading).replace(/일|Working/g, m => `<em>${m}</em>`)}</h2>
+          <div class="now-range">${t(C.now.range)}</div>
+        </div>
+        <div class="now-grid">${items}</div>
+      </section>
+    `;
+  }
+
+  function renderBuilt() {
+    const items = C.builtSites.items.map((s, i) => `
+      <a class="built-card" href="https://${s.url}" target="_blank" rel="noopener">
+        <div class="built-num">/ 0${i+1}</div>
+        <div class="built-name">${s.name}</div>
+        <div class="built-url">${s.url} →</div>
+        <div class="built-desc">${t(s.desc)}</div>
+      </a>
+    `).join('');
+    return `
+      <section id="built" data-chapter="08" data-screen-label="08 Shipped">
+        <div class="kicker">${t(C.builtSites.kicker)}</div>
+        <h2 class="built-heading">${t(C.builtSites.heading).replace(/만든|shipped/g, m => `<em>${m}</em>`)}</h2>
+        <div class="built-list">${items}</div>
+      </section>
+    `;
+  }
+
+  function renderEnterprise() {
+    const rows = C.enterpriseCareer.items.map(item => `
+      <div class="ent-row">
+        <div class="ent-year">${item.year}</div>
+        <div>
+          <div class="ent-company">${t(item.company)}</div>
+          <div class="ent-role">${t(item.role)}</div>
+          <span class="ent-period">${item.period}</span>
+        </div>
+        <div class="ent-body">${t(item.body)}</div>
+      </div>
+    `).join('');
+    return `
+      <section id="enterprise" data-chapter="09" data-screen-label="09 Enterprise">
+        <div class="kicker">${t(C.enterpriseCareer.kicker)}</div>
+        <h2 class="ent-heading">${t(C.enterpriseCareer.heading).replace(/시간|scale/g, m => `<em>${m}</em>`)}</h2>
+        <div class="ent-list">${rows}</div>
+      </section>
+    `;
+  }
+
+  function renderSamsung() {
+    const items = C.samsungEra.items.map(item => `
+      <div class="sam-item">
+        <h4>${t(item.title)}</h4>
+        <p>${t(item.body)}</p>
+      </div>
+    `).join('');
+    return `
+      <section id="samsung" data-chapter="10" data-screen-label="10 Samsung SDS">
+        <div class="kicker">${t(C.samsungEra.kicker)}</div>
+        <div class="sam-hero">
+          <h2 class="sam-heading">${t(C.samsungEra.heading).replace(/안에서 만들었습니다|from the inside/g, m => `<em>${m}</em>`)}</h2>
+          <div class="sam-note">${lang==='ko'?'삼성전자 온라인스토어 · 서비스 지식 포털 · mySingle 그룹웨어 · PMS 솔루션.\n한 세대의 시스템을, 안에서.':'Samsung eStore · Service Knowledge Portal · mySingle groupware · PMS.\nA generation of systems, built from the inside.'}</div>
+        </div>
+        <div class="sam-grid">${items}</div>
+      </section>
+    `;
+  }
+
+  function renderStack() {
+    const groups = C.stack.groups.map(g => `
+      <div class="stack-group">
+        <div class="stack-group-label">${t(g.label)}</div>
+        <div class="stack-items">
+          ${g.items.map(x => `<span class="stack-item">${x}</span>`).join('')}
+        </div>
+      </div>
+    `).join('');
+    return `
+      <section id="stack" data-chapter="11" data-screen-label="11 Stack">
+        <div class="kicker">${t(C.stack.kicker)}</div>
+        <h2 class="stack-heading">${t(C.stack.heading).replace(/것들|with/g, m => `<em>${m}</em>`)}</h2>
+        <div class="stack-groups">${groups}</div>
+      </section>
+    `;
+  }
+
+  function renderEducation() {
+    const schools = C.education.schools.map(s => `
+      <div class="edu-item">
+        <span class="name">${t(s.school)}</span>
+        <span class="meta">${s.year} · ${t(s.major)}</span>
+      </div>
+    `).join('');
+    const certs = C.education.certs.map(c => `<div class="edu-item"><span class="name">${t(c)}</span></div>`).join('');
+    const langs = C.education.languages.map(l => `<div class="edu-item"><span class="name">${t(l)}</span></div>`).join('');
+    return `
+      <section id="education" data-chapter="12" data-screen-label="12 Education">
+        <div class="kicker">${t(C.education.kicker)}</div>
+        <div class="edu-grid">
+          <h2 class="edu-heading">${t(C.education.heading).replace(/자격|credentials/g, m => `<em>${m}</em>`)}</h2>
+          <div class="edu-block">
+            <h4>${lang==='ko'?'학력':'Schools'}</h4>
+            ${schools}
+          </div>
+          <div class="edu-block">
+            <h4>${lang==='ko'?'자격 · 인증':'Certifications'}</h4>
+            ${certs}
+          </div>
+          <div class="edu-block">
+            <h4>${lang==='ko'?'언어':'Languages'}</h4>
+            ${langs}
+          </div>
+        </div>
+      </section>
+    `;
+  }
+
+  function renderContact() {
+    return `
+      <section id="contact" data-chapter="13" data-screen-label="13 Contact">
+        <div class="kicker">${t(C.contact.kicker)}</div>
+        <h2 class="contact-heading">${t(C.contact.heading).replace(/만들어 볼까요|build together/g, m => `<em>${m}</em>`)}</h2>
+        <div class="contact-body">${t(C.contact.body)}</div>
+        <div class="contact-methods">
+          <a class="contact-item" href="mailto:${C.meta.email}">
+            <span class="lbl">Email</span>
+            <span>${C.meta.email}</span>
+          </a>
+        </div>
+        <div class="contact-footer">
+          <span>© 2026 Jasmine Kim</span>
+          <span>Concept A · Terracotta</span>
+        </div>
+      </section>
+    `;
+  }
+
+  function render() {
+    document.getElementById('main').innerHTML = [
+      renderHero(),
+      renderVision(),
+      renderStats(),
+      renderWhy(),
+      renderCapabilities(),
+      renderVC(),
+      renderNow(),
+      renderBuilt(),
+      renderEnterprise(),
+      renderSamsung(),
+      renderStack(),
+      renderEducation(),
+      renderContact(),
+    ].join('');
+    document.getElementById('chapterTotal').textContent = '13';
+    attachInteractions();
+  }
+
+  // ——— cursor ———
+  const cur = document.getElementById('cursor');
+  const ring = document.getElementById('cursorRing');
+  let mx = 0, my = 0, rx = 0, ry = 0;
+  document.addEventListener('mousemove', e => {
+    mx = e.clientX; my = e.clientY;
+    cur.style.transform = `translate(${mx}px, ${my}px) translate(-50%, -50%)`;
+  });
+  function rafRing() {
+    rx += (mx - rx) * 0.18;
+    ry += (my - ry) * 0.18;
+    ring.style.transform = `translate(${rx}px, ${ry}px) translate(-50%, -50%)`;
+    requestAnimationFrame(rafRing);
+  }
+  rafRing();
+
+  function attachInteractions() {
+    document.querySelectorAll('a, button, .cap-row, .now-item, .built-card, .why-point, .stat').forEach(el => {
+      el.addEventListener('mouseenter', () => cur.classList.add('hover'));
+      el.addEventListener('mouseleave', () => cur.classList.remove('hover'));
+    });
+  }
+
+  // ——— chapter counter ———
+  const chapterEl = document.getElementById('chapterNum');
+  function updateChapter() {
+    const sections = document.querySelectorAll('section[data-chapter]');
+    const mid = window.innerHeight / 2;
+    let current = '01';
+    sections.forEach(s => {
+      const r = s.getBoundingClientRect();
+      if (r.top <= mid && r.bottom >= mid) current = s.dataset.chapter;
+    });
+    chapterEl.textContent = current;
+
+    // progress
+    const h = document.documentElement.scrollHeight - window.innerHeight;
+    const p = Math.min(100, (window.scrollY / h) * 100);
+    document.getElementById('progress').style.width = p + '%';
+  }
+  window.addEventListener('scroll', updateChapter, { passive: true });
+
+  // ——— language toggle ———
+  document.querySelectorAll('.lang-toggle button').forEach(btn => {
+    btn.addEventListener('click', () => {
+      lang = btn.dataset.lang;
+      localStorage.setItem('ilsuk_lang', lang);
+      document.querySelectorAll('.lang-toggle button').forEach(b => b.classList.toggle('active', b.dataset.lang === lang));
+      document.documentElement.lang = lang === 'ko' ? 'ko' : 'en';
+      render();
+    });
+  });
+
+  // init
+  document.querySelectorAll('.lang-toggle button').forEach(b => b.classList.toggle('active', b.dataset.lang === lang));
+  document.documentElement.lang = lang === 'ko' ? 'ko' : 'en';
+  render();
+  updateChapter();
+})();
+</script>
+
+</body>
+</html>

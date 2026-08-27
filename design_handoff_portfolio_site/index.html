@@ -1,0 +1,964 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>김일석 — Forward Deployed AI Engineer · Technical PM</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400..800;1,400..800&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css"/>
+<style>
+  :root {
+    --bg: #F1EEE6;
+    --bg-2: #E7E3D8;
+    --paper: #F8F5EB;
+    --ink: #14211A;
+    --ink-2: #2E3B33;
+    --muted: #6E766F;
+    --line: #C4C0B3;
+    --accent: #2F5D3F;        /* deep forest */
+    --accent-hi: #4A7D5C;
+    --accent-tint: rgba(47,93,63,.08);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: 'Pretendard Variable', 'Pretendard', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', sans-serif;
+    font-weight: 400;
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+  a { color: inherit; text-decoration: none; }
+
+  /* subtle grain */
+  body::before {
+    content: ''; position: fixed; inset: 0; pointer-events: none; z-index: 1;
+    opacity: 0.35;
+    background-image:
+      radial-gradient(rgba(20,33,26,.06) 1px, transparent 1px),
+      radial-gradient(rgba(20,33,26,.04) 1px, transparent 1px);
+    background-size: 3px 3px, 5px 5px;
+    background-position: 0 0, 1px 1px;
+    mix-blend-mode: multiply;
+  }
+
+  /* ——— spotlight cursor ——— */
+  .spotlight {
+    position: fixed; inset: 0; pointer-events: none; z-index: 2;
+    background: radial-gradient(600px circle at var(--mx, 50%) var(--my, 50%),
+      rgba(74,125,92,.09), transparent 60%);
+    transition: background .1s;
+  }
+
+  /* ——— top chrome ——— */
+  .chrome {
+    position: fixed; top: 0; left: 0; right: 0; height: 60px;
+    display: grid; grid-template-columns: 1fr auto 1fr;
+    align-items: center; padding: 0 32px; z-index: 100;
+    font-family: 'Pretendard Variable', 'Pretendard', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', sans-serif; font-size: 15px;
+    color: var(--muted); letter-spacing: 0.05em;
+    border-bottom: 1px solid transparent;
+    transition: border-color .3s, background .3s;
+    backdrop-filter: blur(6px);
+  }
+  .chrome.scrolled { border-bottom-color: var(--line); background: rgba(241,238,230,.7); }
+  .chrome .brand { color: var(--ink); font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; }
+  .chrome .center { display: flex; gap: 20px; align-items: center; }
+  .chapter-badge {
+    padding: 5px 12px; border: 1px solid var(--line); border-radius: 999px;
+    font-variant-numeric: tabular-nums; background: var(--paper);
+  }
+  .chapter-badge em { color: var(--accent); font-style: normal; font-weight: 500; }
+  .chapter-title { color: var(--ink-2); text-transform: uppercase; letter-spacing: 0.15em; }
+  .chrome .right { justify-self: end; display: flex; align-items: center; gap: 20px; }
+  .lang-toggle { display: inline-flex; gap: 0; border: 1px solid var(--line); border-radius: 4px; overflow: hidden; background: var(--paper); }
+  .lang-toggle button {
+    all: unset; cursor: pointer; padding: 5px 10px; font-family: 'Pretendard Variable', 'Pretendard', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', sans-serif;
+    font-size: 10px; letter-spacing: 0.1em; color: var(--muted);
+  }
+  .lang-toggle button.active { background: var(--ink); color: var(--paper); }
+
+  /* ——— left rail: table of contents ——— */
+  .toc {
+    position: fixed; left: 24px; top: 50%; transform: translateY(-50%);
+    z-index: 50; display: flex; flex-direction: column; gap: 8px;
+  }
+  .toc-item {
+    display: flex; align-items: center; gap: 12px;
+    font-family: 'Pretendard Variable', 'Pretendard', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', sans-serif; font-size: 10px;
+    color: var(--muted); letter-spacing: 0.1em;
+    padding: 4px 0; cursor: pointer;
+    transition: color .3s;
+  }
+  .toc-item .dot {
+    width: 6px; height: 6px; border-radius: 50%; background: var(--line);
+    transition: all .3s;
+  }
+  .toc-item .label { opacity: 0; transform: translateX(-8px); transition: all .3s; }
+  .toc:hover .toc-item .label { opacity: 1; transform: translateX(0); }
+  .toc-item.active { color: var(--ink); }
+  .toc-item.active .dot { background: var(--accent); transform: scale(1.6); }
+  @media (max-width: 900px) { .toc { display: none; } }
+
+  /* ——— section base ——— */
+  section {
+    min-height: 100vh; padding: 120px 12vw 100px 14vw;
+    display: flex; flex-direction: column; justify-content: center;
+    position: relative;
+  }
+  section + section { border-top: 1px solid var(--line); }
+  .kicker {
+    font-family: 'Pretendard Variable', 'Pretendard', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', sans-serif;
+    font-size: 10px; letter-spacing: 0.25em; text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 32px;
+    display: flex; align-items: center; gap: 14px;
+  }
+  .kicker::before {
+    content: attr(data-num);
+    color: var(--muted); font-weight: 500;
+    padding-right: 14px; border-right: 1px solid var(--line);
+  }
+  h1, h2, h3 {
+    font-family: 'Pretendard Variable', 'Pretendard', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', sans-serif;
+    font-weight: 400;
+    letter-spacing: -0.015em;
+    line-height: 1.1;
+    color: var(--ink);
+  }
+  h1 em, h2 em, h3 em { font-style: italic; color: var(--accent); }
+  /* Korean headline tuning: Pretendard is not italic; use weight + color to preserve emphasis */
+  :lang(ko) h1, :lang(ko) h2, :lang(ko) h3 {
+    font-family: 'Pretendard Variable', 'Pretendard', sans-serif;
+    letter-spacing: -0.035em;
+    font-weight: 500;
+    word-break: keep-all;
+    overflow-wrap: normal;
+    line-break: strict;
+  }
+  :lang(ko) h1 em, :lang(ko) h2 em, :lang(ko) h3 em { font-style: normal; color: var(--accent); font-weight: 600; }
+  /* Korean body text - keep-all so words don't break mid-syllable */
+  :lang(ko) p, :lang(ko) .vision-body, :lang(ko) .sam-note, :lang(ko) .vc-lede,
+  :lang(ko) .cap-title, :lang(ko) .cap-body, :lang(ko) .why-point p, :lang(ko) .ent-body,
+  :lang(ko) .sam-item h4, :lang(ko) .sam-item p, :lang(ko) .built-title, :lang(ko) .built-sub,
+  :lang(ko) .hero-tagline, :lang(ko) .contact-body, :lang(ko) .vc-tenet-body {
+    word-break: keep-all;
+    overflow-wrap: break-word;
+  }
+  p { color: var(--ink-2); font-size: 16px; line-height: 1.75; font-weight: 400; }
+
+  /* ——— hero ——— */
+  #hero { padding-top: 100px; }
+  .hero-marks {
+    display: flex; justify-content: space-between;
+    font-family: 'Pretendard Variable', 'Pretendard', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', sans-serif; font-size: 10px;
+    color: var(--muted); letter-spacing: 0.15em; text-transform: uppercase;
+    margin-bottom: 60px;
+  }
+  .hero-name-row {
+    display: flex; align-items: baseline; gap: 40px; flex-wrap: wrap;
+    margin-bottom: 60px;
+  }
+  .hero-name {
+    font-family: 'Pretendard Variable', 'Pretendard', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', sans-serif; font-weight: 400;
+    font-size: clamp(72px, 12vw, 200px);
+    line-height: 0.9; letter-spacing: -0.02em;
+  }
+  .hero-name .italic { font-style: italic; color: var(--accent); }
+  .hero-badge {
+    padding: 10px 18px; border: 1px solid var(--accent); border-radius: 999px;
+    font-family: 'Pretendard Variable', 'Pretendard', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', sans-serif; font-size: 15px;
+    color: var(--accent); letter-spacing: 0.15em; text-transform: uppercase;
+    background: var(--paper);
+    align-self: center;
+  }
+  .hero-body {
+    display: grid; grid-template-columns: 1fr 1.4fr; gap: 60px;
+    padding-top: 40px; border-top: 1px solid var(--line);
+  }
+  .hero-body .label {
+    font-family: 'Pretendard Variable', 'Pretendard', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', sans-serif; font-size: 10px;
+    letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted);
+    margin-bottom: 12px;
+  }
+  .hero-position-full {
+    font-family: 'Pretendard Variable', 'Pretendard', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', sans-serif; font-size: 22px; line-height: 1.4;
+    color: var(--ink); font-weight: 400;
+  }
+  .hero-tagline {
+    font-family: 'Pretendard Variable', 'Pretendard', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', sans-serif;
+    font-size: clamp(28px, 3vw, 44px);
+    line-height: 1.25; color: var(--ink);
+    font-weight: 400;
+  }
+  .hero-tagline em { font-style: italic; color: var(--accent); }
+
+  /* ——— vision ——— */
+  .vision-heading {
+    font-size: clamp(48px, 6.5vw, 104px);
+    white-space: pre-line; margin-bottom: 40px; max-width: none;
+    word-break: keep-all; line-break: strict; overflow-wrap: normal;
+  }
+  .vision-body {
+    max-width: 700px; font-family: 'Pretendard Variable', 'Pretendard', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', sans-serif;
+    font-size: clamp(20px, 1.6vw, 26px); line-height: 1.5;
+    color: var(--ink-2); font-weight: 400; white-space: pre-line;
+  }
+
+  /* ——— stats ——— */
+  .stats-heading { font-size: clamp(40px, 5.5vw, 88px); margin-bottom: 60px; max-width: none; word-break: keep-all; overflow-wrap: normal; }
+  .stats {
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 0;
+    border-top: 1px solid var(--ink);
+  }
+  .stat {
+    padding: 32px 24px 32px 0;
+    border-right: 1px solid var(--line);
+    position: relative;
+  }
+  .stat:last-child { border-right: none; }
+  .stat:not(:last-child) { padding-right: 24px; }
+  .stat + .stat { padding-left: 24px; }
+  .stat-num {
+    font-family: 'Pretendard Variable', 'Pretendard', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', sans-serif; font-weight: 400;
+    font-size: clamp(56px, 7vw, 120px);
+    line-height: 0.95;
+    color: var(--ink);
+  }
+  .stat-num.italic { font-style: italic; color: var(--accent); }
+  .stat-num sup {
+    font-size: 0.4em; vertical-align: super;
+    color: var(--muted); font-weight: 300;
+  }
+  .stat-label {
+    font-family: 'Pretendard Variable', 'Pretendard', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', sans-serif;
+    font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--ink-2); margin-top: 16px;
+  }
+  .stat-note { font-size: 15px; color: var(--muted); margin-top: 4px; /* was 13px */ font-family: 'Pretendard Variable', 'Pretendard', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', sans-serif; font-style: italic; font-weight: 400; }
+
+  /* ——— why me ——— */
+  .why-heading {
+    font-size: clamp(48px, 6.5vw, 104px);
+    white-space: pre-line; margin-bottom: 80px; max-width: none;
+    word-break: keep-all; line-break: strict; overflow-wrap: normal;
+  }
+  .why-points { display: grid; grid-template-columns: 1fr; gap: 0; border-top: 1px solid var(--line); }
+  .why-point {
+    display: grid; grid-template-columns: 80px 1fr 2fr; gap: 40px;
+    padding: 48px 0; border-bottom: 1px solid var(--line);
+    align-items: baseline;
+    transition: padding-left .3s;
+  }
+  .why-point:hover { padding-left: 24px; background: var(--accent-tint); }
+  .why-point-no {
+    font-family: 'Pretendard Variable', 'Pretendard', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', sans-serif; font-size: 28px;
+    color: var(--accent); font-style: italic; font-weight: 400;
+  }
+  .why-point h3 {
+    font-family: 'Pretendard Variable', 'Pretendard', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', sans-serif;
+    font-size: clamp(24px, 2.2vw, 32px); line-height: 1.15;
+    font-weight: 400;
+  }
+  .why-point p { white-space: pre-line; }
+
+  /* ——— capabilities ——— */
+  .cap-heading { font-size: clamp(48px, 6.5vw, 104px); margin-bottom: 60px; }
+  .cap-table {
+    border-top: 1px solid var(--ink);
+  }
+  .cap-row {
+    display: grid; grid-template-columns: 60px 140px 1.4fr 2fr;
+    gap: 40px; align-items: baseline;
+    padding: 32px 0;
+    border-bottom: 1px solid var(--line);
+    transition: background .3s;
+    position: relative;
+  }
+  .cap-row:hover { background: var(--accent-tint); }
+  .cap-row:hover .cap-no { color: var(--accent); }
+  .cap-no {
+    font-family: 'Pretendard Variable', 'Pretendard', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', sans-serif;
+    font-size: 18px; font-weight: 400; font-style: italic;
+    color: var(--muted);
+    transition: color .3s;
+  }
+  .cap-tag {
+    font-family: 'Pretendard Variable', 'Pretendard', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', sans-serif;
+    font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--accent);
+  }
+  .cap-title {
+    font-family: 'Pretendard Variable', 'Pretendard', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', sans-serif;
+    font-size: clamp(20px, 1.9vw, 26px); line-height: 1.25;
+    font-weight: 500; color: var(--ink);
+  }
+  .cap-body { font-size: 14px; color: var(--muted); white-space: pre-line; line-height: 1.65; }
+
+  /* ——— VC-Framework (big independent) ——— */
+  #vc {
+    background: var(--ink);
+    color: var(--paper);
+    padding: 140px 12vw 140px 14vw;
+  }
+  #vc::before {
+    content: ''; position: absolute; inset: 0;
+    background:
+      radial-gradient(circle at 20% 30%, rgba(74,125,92,.12), transparent 50%),
+      radial-gradient(circle at 80% 70%, rgba(74,125,92,.08), transparent 50%);
+    pointer-events: none;
+  }
+  #vc > * { position: relative; z-index: 1; }
+  #vc .kicker { color: var(--accent-hi); }
+  #vc .kicker::before { color: rgba(248,245,235,.4); border-right-color: rgba(248,245,235,.15); }
+  .vc-hero {
+    display: grid; grid-template-columns: 1.8fr 1fr; gap: 60px;
+    align-items: end; margin-bottom: 80px;
+  }
+  .vc-title {
+    font-family: 'Pretendard Variable', 'Pretendard', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', sans-serif; font-weight: 400;
+    font-size: clamp(56px, 6.5vw, 100px);
+    line-height: 0.95; color: var(--paper);
+    letter-spacing: -0.02em;
+    white-space: pre-line;
+    word-break: keep-all; line-break: strict; overflow-wrap: normal;
+  }
+  .vc-title .italic { font-style: italic; color: var(--accent-hi); }
+  .vc-lede {
+    font-family: 'Pretendard Variable', 'Pretendard', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', sans-serif;
+    font-size: clamp(20px, 1.8vw, 28px);
+    line-height: 1.45; color: rgba(248,245,235,.8);
+    white-space: pre-line; font-weight: 400;
+    padding-bottom: 12px;
+  }
+  .vc-cert {
+    display: inline-flex; align-items: center; gap: 12px;
+    padding: 10px 18px; margin-top: 24px;
+    border: 1px solid rgba(248,245,235,.25); border-radius: 999px;
+    font-family: 'Pretendard Variable', 'Pretendard', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', sans-serif; font-size: 15px;
+    color: rgba(248,245,235,.85); letter-spacing: 0.1em; text-transform: uppercase;
+  }
+  .vc-cert .seal {
+    display: inline-block; width: 8px; height: 8px; border-radius: 50%;
+    background: var(--accent-hi);
+    box-shadow: 0 0 0 4px rgba(74,125,92,.2);
+    animation: pulse 2.5s ease-in-out infinite;
+  }
+  @keyframes pulse { 0%, 100% { box-shadow: 0 0 0 4px rgba(74,125,92,.2); } 50% { box-shadow: 0 0 0 8px rgba(74,125,92,.05); } }
+  .vc-badges {
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 32px;
+    border-top: 1px solid rgba(248,245,235,.15);
+    border-bottom: 1px solid rgba(248,245,235,.15);
+    padding: 36px 0; margin-bottom: 80px;
+  }
+  .vc-badge-label {
+    font-family: 'Pretendard Variable', 'Pretendard', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', sans-serif;
+    font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase;
+    color: rgba(248,245,235,.5); margin-bottom: 12px;
+  }
+  .vc-badge-value {
+    font-family: 'Pretendard Variable', 'Pretendard', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', sans-serif; font-size: 22px; line-height: 1.2;
+    color: var(--paper); font-weight: 400;
+  }
+  .vc-tenets { display: grid; grid-template-columns: repeat(3, 1fr); gap: 60px; }
+  .vc-tenet {
+    padding-top: 20px;
+    border-top: 1px solid rgba(248,245,235,.15);
+  }
+  .vc-tenet-no {
+    font-family: 'Pretendard Variable', 'Pretendard', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', sans-serif; font-size: 22px; font-style: italic;
+    color: var(--accent-hi); display: block; margin-bottom: 12px;
+  }
+  .vc-tenet-body {
+    font-family: 'Pretendard Variable', 'Pretendard', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', sans-serif;
+    font-size: 20px; line-height: 1.45;
+    color: rgba(248,245,235,.9);
+  }
+
+  /* ——— built sites (marquee) ——— */
+  .built-heading { font-size: clamp(48px, 6.5vw, 104px); margin-bottom: 24px; }
+  .built-sub {
+    font-size: 15px; color: var(--muted); margin-bottom: 48px; max-width: 640px; line-height: 1.6;
+  }
+  .built-marquee {
+    position: relative;
+    margin: 0 -6vw;
+    padding: 8px 0 24px;
+    overflow: hidden;
+    -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 6%, #000 94%, transparent 100%);
+            mask-image: linear-gradient(90deg, transparent 0, #000 6%, #000 94%, transparent 100%);
+  }
+  .built-track {
+    display: flex;
+    gap: 24px;
+    width: max-content;
+    animation: built-slide 60s linear infinite;
+    will-change: transform;
+  }
+  .built-marquee:hover .built-track { animation-play-state: paused; }
+  @keyframes built-slide {
+    from { transform: translate3d(0, 0, 0); }
+    to   { transform: translate3d(-50%, 0, 0); }
+  }
+  .built-card {
+    flex: 0 0 320px;
+    display: flex; flex-direction: column;
+    background: var(--paper);
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    overflow: hidden;
+    text-decoration: none;
+    color: inherit;
+    transition: transform .3s ease, border-color .3s ease, box-shadow .3s ease;
+  }
+  .built-card:hover {
+    transform: translateY(-4px);
+    border-color: var(--accent);
+    box-shadow: 0 20px 40px -24px rgba(20,33,26,.35);
+  }
+  .built-card.is-internal { cursor: default; }
+  .built-card.is-internal:hover { transform: none; border-color: var(--line); box-shadow: none; }
+  .built-thumb {
+    aspect-ratio: 16 / 10;
+    background-size: cover;
+    background-position: top center;
+    position: relative;
+    display: flex; align-items: flex-end; justify-content: flex-start;
+    padding: 16px;
+    overflow: hidden;
+    transition: background-position 6s ease-out;
+  }
+  .built-card:hover .built-thumb {
+    background-position: bottom center;
+  }
+  .built-thumb::after {
+    content: '';
+    position: absolute; inset: 0;
+    background:
+      linear-gradient(180deg, rgba(0,0,0,0.28) 0%, transparent 22%, transparent 60%, rgba(0,0,0,0.35) 100%);
+    pointer-events: none;
+  }
+  .built-thumb-mark {
+    position: relative; z-index: 1;
+    font-size: 12px; letter-spacing: 0.16em; text-transform: uppercase;
+    color: rgba(255,255,255,0.95); font-weight: 500;
+    text-shadow: 0 1px 8px rgba(0,0,0,0.5);
+  }
+  .built-body {
+    padding: 20px 22px 22px;
+    display: flex; flex-direction: column; gap: 6px;
+    min-height: 118px;
+  }
+  .built-name {
+    font-size: 20px; line-height: 1.25; font-weight: 500; letter-spacing: -0.01em; color: var(--ink);
+  }
+  .built-title {
+    font-size: 14px; color: var(--ink-2); line-height: 1.45;
+  }
+  .built-url {
+    margin-top: auto; padding-top: 10px;
+    font-size: 12px; letter-spacing: 0.06em; color: var(--muted);
+    display: flex; align-items: center; gap: 6px;
+  }
+  .built-card:not(.is-internal):hover .built-url { color: var(--accent); }
+  .built-url .arrow { transition: transform .3s ease; }
+  .built-card:not(.is-internal):hover .built-url .arrow { transform: translateX(3px); }
+
+  /* ——— enterprise ——— */
+  .ent-heading { font-size: clamp(48px, 6.5vw, 104px); margin-bottom: 60px; }
+  .ent-list { border-top: 1px solid var(--ink); }
+  .ent-row {
+    display: grid; grid-template-columns: 100px 1fr 1.6fr;
+    gap: 40px; padding: 36px 0;
+    border-bottom: 1px solid var(--line);
+    align-items: baseline;
+    transition: all .3s;
+  }
+  .ent-row:hover { background: var(--accent-tint); }
+  .ent-row:hover .ent-year { color: var(--accent); }
+  .ent-year {
+    font-family: 'Pretendard Variable', 'Pretendard', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', sans-serif; font-size: 32px;
+    color: var(--muted); font-weight: 400; font-style: italic;
+    transition: color .3s;
+  }
+  .ent-company {
+    font-family: 'Pretendard Variable', 'Pretendard', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', sans-serif; font-size: 26px; line-height: 1.2;
+    font-weight: 500; margin-bottom: 6px;
+  }
+  .ent-role {
+    font-family: 'Pretendard Variable', 'Pretendard', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', sans-serif; font-size: 15px;
+    letter-spacing: 0.1em; color: var(--muted); text-transform: uppercase;
+  }
+  .ent-body { font-size: 14px; color: var(--ink-2); line-height: 1.65; }
+  .ent-period { font-family: 'Pretendard Variable', 'Pretendard', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', sans-serif; font-size: 10px; color: var(--muted); margin-top: 6px; display: block; }
+
+  /* ——— samsung ——— */
+  #samsung { background: var(--bg-2); }
+  .sam-hero { display: grid; grid-template-columns: 1.7fr 1fr; gap: 60px; align-items: end; margin-bottom: 80px; }
+  .sam-heading {
+    font-size: clamp(40px, 4.5vw, 76px);
+    white-space: pre-line;
+    line-height: 1.05;
+    word-break: keep-all; line-break: strict; overflow-wrap: normal;
+  }
+  .sam-note {
+    font-family: 'Pretendard Variable', 'Pretendard', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', sans-serif;
+    font-size: 20px; line-height: 1.55; color: var(--ink-2);
+    padding-bottom: 20px; font-style: italic; font-weight: 400;
+  }
+  .sam-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 40px; }
+  .sam-item { padding-top: 20px; border-top: 1px solid var(--ink); }
+  .sam-item h4 {
+    font-family: 'Pretendard Variable', 'Pretendard', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', sans-serif; font-size: 20px; line-height: 1.3;
+    font-weight: 500; margin-bottom: 10px; color: var(--ink);
+  }
+  .sam-item p { font-size: 14px; color: var(--muted); line-height: 1.6; }
+
+  /* ——— stack ——— */
+  .stack-heading { font-size: clamp(48px, 6.5vw, 104px); margin-bottom: 60px; }
+  .stack-groups { display: grid; grid-template-columns: repeat(5, 1fr); gap: 32px; border-top: 1px solid var(--ink); padding-top: 40px; }
+  .stack-group-label {
+    font-family: 'Pretendard Variable', 'Pretendard', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', sans-serif; font-size: 10px;
+    letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--accent); margin-bottom: 20px;
+  }
+  .stack-items { display: flex; flex-direction: column; gap: 10px; }
+  .stack-item {
+    font-family: 'Pretendard Variable', 'Pretendard', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', sans-serif; font-size: 18px; color: var(--ink);
+    font-weight: 400; line-height: 1.3;
+  }
+
+  /* ——— education ——— */
+  .edu-heading { font-size: clamp(48px, 6.5vw, 104px); margin-bottom: 40px; }
+  .edu-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 60px; border-top: 1px solid var(--line); padding-top: 40px; }
+  .edu-grid.edu-grid-2 { grid-template-columns: 2fr 1fr; gap: 80px; max-width: 1100px; }
+  .edu-block h4 {
+    font-family: 'Pretendard Variable', 'Pretendard', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', sans-serif; font-size: 10px;
+    letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--accent); margin-bottom: 20px;
+  }
+  .edu-item {
+    padding: 12px 0; border-bottom: 1px solid var(--line);
+    display: flex; justify-content: space-between; align-items: baseline; gap: 20px;
+  }
+  .edu-item .name { font-family: 'Pretendard Variable', 'Pretendard', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', sans-serif; font-size: 17px; font-weight: 400; }
+  .edu-item .meta { font-family: 'Pretendard Variable', 'Pretendard', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', sans-serif; font-size: 10px; color: var(--muted); letter-spacing: 0.1em; }
+
+  /* ——— contact ——— */
+  #contact {
+    background: var(--ink); color: var(--paper);
+    align-items: center; text-align: center;
+    padding: 140px 12vw;
+  }
+  #contact::before {
+    content: ''; position: absolute; inset: 0;
+    background: radial-gradient(circle at 50% 40%, rgba(74,125,92,.15), transparent 60%);
+    pointer-events: none;
+  }
+  #contact > * { position: relative; }
+  #contact .kicker { color: var(--accent-hi); justify-content: center; }
+  #contact .kicker::before { color: rgba(248,245,235,.4); border-right-color: rgba(248,245,235,.15); }
+  .contact-heading {
+    font-family: 'Pretendard Variable', 'Pretendard', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', sans-serif; font-weight: 400;
+    font-size: clamp(56px, 9vw, 160px);
+    line-height: 0.95; color: var(--paper);
+    margin-bottom: 40px;
+  }
+  .contact-heading em { color: var(--accent-hi); font-style: italic; }
+  .contact-body {
+    font-family: 'Pretendard Variable', 'Pretendard', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', sans-serif; font-size: 24px; line-height: 1.5;
+    color: rgba(248,245,235,.75); margin-bottom: 60px; white-space: pre-line;
+    font-weight: 400;
+  }
+  .contact-methods { display: inline-flex; flex-direction: column; gap: 16px; align-items: stretch; min-width: 380px; }
+  .contact-item {
+    display: grid; grid-template-columns: 100px 1fr;
+    gap: 20px; align-items: center;
+    font-family: 'Pretendard Variable', 'Pretendard', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', sans-serif; font-size: 14px;
+    color: var(--paper); letter-spacing: 0.03em;
+    padding: 18px 24px; border: 1px solid rgba(248,245,235,.2);
+    border-radius: 4px; transition: all .3s;
+    text-align: left;
+  }
+  .contact-item:hover {
+    background: var(--accent); border-color: var(--accent);
+  }
+  .contact-item .lbl { color: rgba(248,245,235,.5); font-size: 10px; text-transform: uppercase; letter-spacing: 0.2em; }
+  .contact-footer {
+    position: absolute; bottom: 40px; left: 12vw; right: 12vw;
+    display: flex; justify-content: space-between;
+    font-family: 'Pretendard Variable', 'Pretendard', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', sans-serif; font-size: 10px;
+    color: rgba(248,245,235,.4); letter-spacing: 0.15em; text-transform: uppercase;
+  }
+
+  @media (max-width: 900px) {
+    section { padding: 100px 6vw 80px; }
+    .hero-body, .vc-hero, .sam-hero { grid-template-columns: 1fr; gap: 40px; }
+    .stats { grid-template-columns: 1fr 1fr; }
+    .stat { border-right: none; border-bottom: 1px solid var(--line); }
+    .why-points, .stack-groups, .sam-grid, .vc-badges, .vc-tenets, .edu-grid { grid-template-columns: 1fr 1fr; }
+    .built-marquee { margin: 0 -6vw; }
+    .built-card { flex: 0 0 280px; }
+    .why-point, .cap-row, .ent-row { grid-template-columns: 60px 1fr; gap: 20px; }
+    .why-point p, .cap-body, .ent-body { grid-column: 2; }
+  }
+</style>
+</head>
+<body>
+
+<div class="spotlight" id="spotlight"></div>
+
+<div class="chrome" id="chrome">
+  <div class="brand">Jasmine Kim / Portfolio 2026</div>
+  <div class="center">
+    <span class="chapter-badge"><em id="chapterNum">01</em>/<span id="chapterTotal">13</span></span>
+    <span class="chapter-title" id="chapterTitle">Hero</span>
+  </div>
+  <div class="right">
+    <span class="lang-toggle">
+      <button data-lang="ko" class="active">KO</button>
+      <button data-lang="en">EN</button>
+    </span>
+  </div>
+</div>
+
+<nav class="toc" id="toc"></nav>
+
+<main id="main"></main>
+
+<script src="shared/content.js?v=10"></script>
+<script>
+(function() {
+  const C = window.PORTFOLIO_CONTENT;
+  let lang = localStorage.getItem('ilsuk_lang') || 'ko';
+  const t = (v) => (v && typeof v === 'object' && (v.ko || v.en)) ? (v[lang] || v.ko || v.en) : v;
+
+  const CHAPTERS = [
+    { id: 'hero',        num: '01', title: { ko: '표지', en: 'Cover' } },
+    { id: 'vision',      num: '02', title: { ko: '비전', en: 'Vision' } },
+    { id: 'why',         num: '03', title: { ko: '왜 나인가', en: 'Why me' } },
+    { id: 'capabilities',num: '04', title: { ko: '핵심 역량', en: 'Capabilities' } },
+    { id: 'vc',          num: '05', title: { ko: 'VC-Framework', en: 'VC-Framework' } },
+    { id: 'built',       num: '06', title: { ko: '만든 서비스', en: 'Shipped' } },
+    { id: 'enterprise',  num: '07', title: { ko: '엔터프라이즈', en: 'Enterprise' } },
+    { id: 'samsung',     num: '08', title: { ko: '삼성SDS', en: 'Samsung SDS' } },
+    { id: 'stack',       num: '09', title: { ko: '스택', en: 'Stack' } },
+    { id: 'education',   num: '10', title: { ko: '자격·언어', en: 'Credentials' } },
+    { id: 'contact',     num: '11', title: { ko: '연락', en: 'Contact' } },
+  ];
+
+  function renderHero() {
+    const isKo = lang === 'ko';
+    return `
+      <section id="hero" data-chapter="01" data-screen-label="01 Hero">
+        <div class="hero-marks">
+          <span>Portfolio · 2026</span>
+          <span>Concept B · Deep Forest</span>
+          <span>Volume I</span>
+        </div>
+        <div class="hero-name-row">
+          <div class="hero-name">${isKo?'김일석':'Jasmine <span class="italic">Kim</span>'}</div>
+          <div class="hero-badge">Available for hire · ${isKo?'상담 가능':'Open to talk'}</div>
+        </div>
+        <div class="hero-body">
+          <div>
+            <div class="label">Position</div>
+            <div class="hero-position-full">Forward Deployed AI Engineer<br/><em style="font-style:italic;color:var(--accent)">Technical Product Manager</em></div>
+          </div>
+          <div>
+            <div class="label">${isKo?'한 줄 소개':'One line'}</div>
+            <div class="hero-tagline">${isKo?'AI 서비스를 <em>실제로 만들어 본</em> PM.<br/>30년의 엔터프라이즈, 2년의 실전 AI.':'A PM who has <em>actually shipped</em> AI products.<br/>30 years of enterprise, 2 years of real AI.'}</div>
+          </div>
+        </div>
+      </section>
+    `;
+  }
+
+  function renderVision() {
+    return `
+      <section id="vision" data-chapter="02" data-screen-label="02 Vision">
+        <div class="kicker" data-num="02">${t(C.vision.kicker)}</div>
+        <h2 class="vision-heading">${t(C.vision.heading).replace(/AI 서비스를 “리딩하는” PM|a PM who builds AI products/g, m => `<em>${m}</em>`)}</h2>
+        <div class="vision-body">${t(C.vision.body)}</div>
+      </section>
+    `;
+  }
+
+  function renderWhy() {
+    const points = C.whyMe.points.map((p, i) => `
+      <div class="why-point">
+        <div class="why-point-no">${(i+1).toString().padStart(2,'0')}</div>
+        <h3>${t(p.title)}</h3>
+        <p>${t(p.body)}</p>
+      </div>
+    `).join('');
+    return `
+      <section id="why" data-chapter="03" data-screen-label="03 Why me">
+        <div class="kicker" data-num="03">${t(C.whyMe.kicker)}</div>
+        <h2 class="why-heading">${t(C.whyMe.heading).replace(/어렵습니다|rarer than you think/g, m => `<em>${m}</em>`)}</h2>
+        <div class="why-points">${points}</div>
+      </section>
+    `;
+  }
+
+  function renderCapabilities() {
+    const rows = C.capabilities.items.map(item => `
+      <div class="cap-row">
+        <div class="cap-no">${item.no}</div>
+        <div class="cap-tag">${t(item.tag)}</div>
+        <div class="cap-title">${t(item.title)}</div>
+        <div class="cap-body">${t(item.body)}</div>
+      </div>
+    `).join('');
+    return `
+      <section id="capabilities" data-chapter="04" data-screen-label="04 Capabilities">
+        <div class="kicker" data-num="04">${t(C.capabilities.kicker)}</div>
+        <h2 class="cap-heading">${t(C.capabilities.heading).replace(/최고의 역량|do/g, m => `<em>${m}</em>`)}</h2>
+        <div class="cap-table">${rows}</div>
+      </section>
+    `;
+  }
+
+  function renderVC() {
+    const badges = C.vc.badges.map(b => `
+      <div class="vc-badge">
+        <div class="vc-badge-label">${t(b.label)}</div>
+        <div class="vc-badge-value">${t(b.value)}</div>
+      </div>
+    `).join('');
+    const tenets = C.vc.tenets.map((tn, i) => `
+      <div class="vc-tenet">
+        <span class="vc-tenet-no">${(i+1).toString().padStart(2,'0')}.</span>
+        <div class="vc-tenet-body">${t(tn)}</div>
+      </div>
+    `).join('');
+    return `
+      <section id="vc" data-chapter="05" data-screen-label="05 VC-Framework">
+        <div class="kicker" data-num="05">${t(C.vc.kicker)}</div>
+        <div class="vc-hero">
+          <div>
+            <h2 class="vc-title">${t(C.vc.heading).replace(/Vibe Coding/g, '<span class="italic">Vibe Coding</span>')}</h2>
+            <div class="vc-cert"><span class="seal"></span>${lang==='ko'?'한국저작권위원회 등록 · 특허 출원 중':'Registered · Patent pending'}</div>
+          </div>
+          <div class="vc-lede">${t(C.vc.lede)}</div>
+        </div>
+        <div class="vc-badges">${badges}</div>
+        <div class="vc-tenets">${tenets}</div>
+      </section>
+    `;
+  }
+
+
+  function renderBuilt() {
+    const buildCard = (s) => {
+      const isInternal = !s.href;
+      const tag = isInternal ? 'div' : 'a';
+      const attrs = isInternal
+        ? 'class="built-card is-internal"'
+        : `class="built-card" href="${s.href}" target="_blank" rel="noopener"`;
+      const thumbStyle = s.img
+        ? `--tint1:${s.tint};--tint2:${s.tint2};background-image:url('${s.img}');background-color:${s.tint};`
+        : `--tint1:${s.tint};--tint2:${s.tint2};background-image:linear-gradient(135deg, ${s.tint}, ${s.tint2});`;
+      const urlText = typeof s.url === 'string' ? s.url : t(s.url);
+      const arrow = isInternal ? '' : '<span class="arrow">→</span>';
+      return `
+        <${tag} ${attrs}>
+          <div class="built-thumb" style="${thumbStyle}">
+            <div class="built-thumb-mark">${t(s.name)}</div>
+          </div>
+          <div class="built-body">
+            <div class="built-name">${t(s.name)}</div>
+            <div class="built-title">${t(s.title)}</div>
+            <div class="built-url">${urlText} ${arrow}</div>
+          </div>
+        </${tag}>
+      `;
+    };
+    // Duplicate the list once so the -50% keyframe produces a seamless loop.
+    const cards = C.builtSites.items.map(buildCard).join('');
+    const track = cards + cards;
+    const subCopy = lang === 'ko'
+      ? '스타트업 자체 서비스부터 대기업 글로벌 플랫폼까지, 기획·설계·구축·운영을 리딩한 서비스들.'
+      : 'From startup products to global enterprise platforms — services I led across design, build, and ops.';
+    return `
+      <section id="built" data-chapter="06" data-screen-label="06 Shipped">
+        <div class="kicker" data-num="06">${t(C.builtSites.kicker)}</div>
+        <h2 class="built-heading">${t(C.builtSites.heading).replace(/만들어 온|have built/g, m => `<em>${m}</em>`)}</h2>
+        <div class="built-sub">${subCopy}</div>
+        <div class="built-marquee">
+          <div class="built-track">${track}</div>
+        </div>
+      </section>
+    `;
+  }
+
+  function renderEnterprise() {
+    const rows = C.enterpriseCareer.items.map(item => `
+      <div class="ent-row">
+        <div class="ent-year">${item.year}</div>
+        <div>
+          <div class="ent-company">${t(item.company)}</div>
+          <div class="ent-role">${t(item.role)}</div>
+          <span class="ent-period">${item.period}</span>
+        </div>
+        <div class="ent-body">${t(item.body)}</div>
+      </div>
+    `).join('');
+    return `
+      <section id="enterprise" data-chapter="07" data-screen-label="07 Enterprise">
+        <div class="kicker" data-num="07">${t(C.enterpriseCareer.kicker)}</div>
+        <h2 class="ent-heading">${t(C.enterpriseCareer.heading).replace(/다져진 시간|scale/g, m => `<em>${m}</em>`)}</h2>
+        <div class="ent-list">${rows}</div>
+      </section>
+    `;
+  }
+
+  function renderSamsung() {
+    const items = C.samsungEra.items.map(item => `
+      <div class="sam-item">
+        <h4>${t(item.title)}</h4>
+        <p>${t(item.body)}</p>
+      </div>
+    `).join('');
+    return `
+      <section id="samsung" data-chapter="08" data-screen-label="08 Samsung SDS">
+        <div class="kicker" data-num="08">${t(C.samsungEra.kicker)}</div>
+        <div class="sam-hero">
+          <h2 class="sam-heading">${t(C.samsungEra.heading).replace(/직접 만들었습니다|from the inside/g, m => `<em>${m}</em>`)}</h2>
+          <div class="sam-note">${lang==='ko'?'삼성전자 온라인스토어 · 서비스 지식 포털 · mySingle 그룹웨어 · PMS 솔루션.\n한 세대의 시스템을, 안에서.':'Samsung eStore · Service Knowledge Portal · mySingle · PMS.\nA generation of systems, built from the inside.'}</div>
+        </div>
+        <div class="sam-grid">${items}</div>
+      </section>
+    `;
+  }
+
+  function renderStack() {
+    const groups = C.stack.groups.map(g => `
+      <div class="stack-group">
+        <div class="stack-group-label">${t(g.label)}</div>
+        <div class="stack-items">
+          ${g.items.map(x => `<span class="stack-item">${x}</span>`).join('')}
+        </div>
+      </div>
+    `).join('');
+    return `
+      <section id="stack" data-chapter="09" data-screen-label="09 Stack">
+        <div class="kicker" data-num="09">${t(C.stack.kicker)}</div>
+        <h2 class="stack-heading">${t(C.stack.heading).replace(/것들|with/g, m => `<em>${m}</em>`)}</h2>
+        <div class="stack-groups">${groups}</div>
+      </section>
+    `;
+  }
+
+  function renderEducation() {
+    const certs = C.education.certs.map(c => `<div class="edu-item"><span class="name">${t(c)}</span></div>`).join('');
+    const langs = C.education.languages.map(l => `<div class="edu-item"><span class="name">${t(l)}</span></div>`).join('');
+    return `
+      <section id="education" data-chapter="10" data-screen-label="10 Credentials">
+        <div class="kicker" data-num="10">${lang==='ko'?'자격 · 언어':'Credentials'}</div>
+        <h2 class="edu-heading">${lang==='ko'?'자격과 <em>언어</em>.':'Certifications & <em>languages</em>.'}</h2>
+        <div class="edu-grid edu-grid-2">
+          <div class="edu-block"><h4>${lang==='ko'?'자격 · 인증':'Certifications'}</h4>${certs}</div>
+          <div class="edu-block"><h4>${lang==='ko'?'언어':'Languages'}</h4>${langs}</div>
+        </div>
+      </section>
+    `;
+  }
+
+  function renderContact() {
+    return `
+      <section id="contact" data-chapter="11" data-screen-label="11 Contact">
+        <div class="kicker" data-num="11">${t(C.contact.kicker)}</div>
+        <!-- contact remains chapter 13; total is still 13 including credentials -->
+        <h2 class="contact-heading">${t(C.contact.heading).replace(/만들어 볼까요|build together/g, m => `<em>${m}</em>`)}</h2>
+        <div class="contact-body">${t(C.contact.body)}</div>
+        <div class="contact-methods">
+          <a class="contact-item" href="mailto:${C.meta.email}"><span class="lbl">Email</span><span>${C.meta.email}</span></a>
+        </div>
+        <div class="contact-footer">
+          <span>© 2026 Jasmine Kim</span>
+          <span>Concept B · Deep Forest</span>
+        </div>
+      </section>
+    `;
+  }
+
+  function renderTOC() {
+    return CHAPTERS.map(c => `
+      <a class="toc-item" data-id="${c.id}" href="#${c.id}">
+        <span class="dot"></span>
+        <span>${c.num}</span>
+        <span class="label">${t(c.title)}</span>
+      </a>
+    `).join('');
+  }
+
+  function render() {
+    document.getElementById('main').innerHTML = [
+      renderHero(), renderVision(), renderWhy(), renderCapabilities(),
+      renderVC(), renderBuilt(), renderEnterprise(),
+      renderSamsung(), renderStack(), renderEducation(), renderContact(),
+    ].join('');
+    document.getElementById('toc').innerHTML = renderTOC();
+    document.getElementById('chapterTotal').textContent = CHAPTERS.length.toString().padStart(2,'0');
+    attachTocClicks();
+  }
+
+  function attachTocClicks() {
+    document.querySelectorAll('.toc-item').forEach(el => {
+      el.addEventListener('click', e => {
+        e.preventDefault();
+        const target = document.getElementById(el.dataset.id);
+        if (target) window.scrollTo({ top: target.offsetTop, behavior: 'smooth' });
+      });
+    });
+  }
+
+  // spotlight
+  const spot = document.getElementById('spotlight');
+  document.addEventListener('mousemove', e => {
+    spot.style.setProperty('--mx', e.clientX + 'px');
+    spot.style.setProperty('--my', e.clientY + 'px');
+  });
+
+  // chapter tracking
+  function updateChapter() {
+    const sections = document.querySelectorAll('section[data-chapter]');
+    const mid = window.innerHeight / 2;
+    let current = CHAPTERS[0];
+    sections.forEach(s => {
+      const r = s.getBoundingClientRect();
+      if (r.top <= mid && r.bottom >= mid) {
+        current = CHAPTERS.find(c => c.id === s.id) || current;
+      }
+    });
+    document.getElementById('chapterNum').textContent = current.num;
+    document.getElementById('chapterTitle').textContent = t(current.title);
+    document.querySelectorAll('.toc-item').forEach(el =>
+      el.classList.toggle('active', el.dataset.id === current.id));
+    document.getElementById('chrome').classList.toggle('scrolled', window.scrollY > 40);
+  }
+  window.addEventListener('scroll', updateChapter, { passive: true });
+
+  document.querySelectorAll('.lang-toggle button').forEach(btn => {
+    btn.addEventListener('click', () => {
+      lang = btn.dataset.lang;
+      localStorage.setItem('ilsuk_lang', lang);
+      document.querySelectorAll('.lang-toggle button').forEach(b => b.classList.toggle('active', b.dataset.lang === lang));
+      document.documentElement.lang = lang === 'ko' ? 'ko' : 'en';
+      render(); updateChapter();
+    });
+  });
+
+  document.querySelectorAll('.lang-toggle button').forEach(b => b.classList.toggle('active', b.dataset.lang === lang));
+  document.documentElement.lang = lang === 'ko' ? 'ko' : 'en';
+  render();
+  updateChapter();
+})();
+</script>
+
+</body>
+</html>

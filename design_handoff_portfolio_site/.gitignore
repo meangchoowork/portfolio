@@ -1,0 +1,14 @@
+node_modules/
+npm-debug.log*
+.env
+.env.local
+.DS_Store
+*.log
+.thumbnail.jpg
+*.srcmap.json
+.gitattributes
+
+# Private / source materials — do not publish
+ILSUK.KIM_CV.md
+screenshots/
+

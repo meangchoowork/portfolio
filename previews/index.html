@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Jasmine Kim Portfolio · 3 Concepts</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght,SOFT@9..144,300..700,0..100&family=Geist+Mono:wght@400;500&family=Geist:wght@300;400;500;600&display=swap" rel="stylesheet" />
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg: #F4F1EA;
+    --paper: #FCFAF3;
+    --ink: #101018;
+    --ink-2: #2B2B36;
+    --muted: #7B7B85;
+    --line: #D4CFC1;
+  }
+  html, body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: 'Geist', -apple-system, sans-serif;
+    font-weight: 400; line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+    min-height: 100vh;
+  }
+  body::before {
+    content: ''; position: fixed; inset: 0; pointer-events: none;
+    background-image:
+      linear-gradient(rgba(16,16,24,.035) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(16,16,24,.035) 1px, transparent 1px);
+    background-size: 60px 60px;
+    opacity: 0.5;
+  }
+  a { color: inherit; text-decoration: none; }
+
+  .top {
+    padding: 40px 6vw 20px;
+    display: flex; justify-content: space-between; align-items: center;
+    font-family: 'Geist Mono', monospace; font-size: 11px;
+    color: var(--muted); letter-spacing: 0.05em;
+  }
+  .top .brand { color: var(--ink); font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; }
+  .top .brand::before {
+    content: ''; display: inline-block; width: 10px; height: 10px; background: var(--ink);
+    border-radius: 2px; margin-right: 8px; vertical-align: -1px;
+  }
+
+  header {
+    padding: 60px 6vw 40px;
+    position: relative; z-index: 1;
+  }
+  .eyebrow {
+    font-family: 'Geist Mono', monospace; font-size: 11px;
+    letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--muted); margin-bottom: 24px;
+    display: inline-flex; align-items: center; gap: 12px;
+  }
+  .eyebrow::before {
+    content: ''; width: 24px; height: 1px; background: var(--muted);
+  }
+  h1 {
+    font-family: 'Fraunces', serif; font-weight: 300;
+    font-size: clamp(56px, 8vw, 128px);
+    line-height: 0.95; letter-spacing: -0.03em;
+    max-width: 20ch;
+    font-variation-settings: "SOFT" 30, "opsz" 144;
+  }
+  h1 em {
+    font-style: italic;
+    font-variation-settings: "SOFT" 100, "opsz" 144;
+  }
+  .lede {
+    max-width: 60ch; margin-top: 32px;
+    font-size: 17px; line-height: 1.65; color: var(--ink-2);
+  }
+  .lede strong { color: var(--ink); font-weight: 500; }
+
+  .concepts {
+    padding: 60px 6vw 40px;
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px;
+    position: relative; z-index: 1;
+  }
+  .concept-card {
+    background: var(--paper);
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    overflow: hidden;
+    display: flex; flex-direction: column;
+    transition: transform .4s cubic-bezier(.2,.6,.2,1), box-shadow .4s;
+    position: relative;
+  }
+  .concept-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 30px 60px -30px rgba(16,16,24,.25);
+  }
+  .concept-preview {
+    height: 320px; position: relative; overflow: hidden;
+    border-bottom: 1px solid var(--line);
+  }
+  /* A · Terracotta */
+  .preview-A {
+    background: #F3EDE1;
+    display: flex; align-items: center; justify-content: center;
+    padding: 40px;
+  }
+  .preview-A .big {
+    font-family: 'Fraunces', serif; font-weight: 300;
+    font-size: 96px; line-height: 0.85; color: #1B1613;
+    font-variation-settings: "SOFT" 30, "opsz" 144;
+    text-align: center;
+  }
+  .preview-A .big .ital {
+    display: block; font-style: italic; color: #C24B25;
+    padding-left: 0.5em;
+    font-variation-settings: "SOFT" 100, "opsz" 144;
+  }
+  .preview-A .dot { display: inline-block; width: 8px; height: 8px; background: #C24B25; border-radius: 50%; margin: 0 4px 8px; vertical-align: middle; }
+  .preview-A .tag {
+    position: absolute; top: 16px; left: 16px; right: 16px;
+    display: flex; justify-content: space-between;
+    font-family: 'Geist Mono', monospace; font-size: 9px;
+    color: #7B6E62; letter-spacing: 0.15em; text-transform: uppercase;
+  }
+
+  /* B · Deep Forest */
+  .preview-B {
+    background: #F1EEE6;
+    display: flex; flex-direction: column; justify-content: center;
+    padding: 40px;
+  }
+  .preview-B .big {
+    font-family: 'EB Garamond', serif; font-weight: 400;
+    font-size: 84px; line-height: 0.9; color: #14211A;
+    letter-spacing: -0.02em; text-align: center;
+    margin-bottom: 20px;
+  }
+  .preview-B .big .ital { font-style: italic; color: #2F5D3F; }
+  .preview-B .badge {
+    align-self: center;
+    padding: 8px 14px; border: 1px solid #2F5D3F; border-radius: 999px;
+    font-family: 'Geist Mono', monospace; font-size: 10px;
+    color: #2F5D3F; letter-spacing: 0.15em; text-transform: uppercase;
+    background: #F8F5EB;
+  }
+  .preview-B .tag {
+    position: absolute; top: 16px; left: 16px; right: 16px;
+    display: flex; justify-content: space-between;
+    font-family: 'Geist Mono', monospace; font-size: 9px;
+    color: #6E766F; letter-spacing: 0.15em; text-transform: uppercase;
+  }
+
+  /* C · Ink Cobalt */
+  .preview-C {
+    background: #F4F1EA;
+    display: flex; flex-direction: column; justify-content: center;
+    padding: 40px;
+    background-image:
+      linear-gradient(rgba(16,16,24,.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(16,16,24,.04) 1px, transparent 1px);
+    background-size: 30px 30px;
+  }
+  .preview-C .big {
+    font-family: 'Fraunces', serif; font-weight: 300;
+    font-size: 96px; line-height: 0.85; color: #101018;
+    letter-spacing: -0.04em;
+    font-variation-settings: "SOFT" 30, "opsz" 144;
+  }
+  .preview-C .big .ital {
+    display: block; font-style: italic; color: #1A3B8F;
+    padding-left: 0.3em;
+    font-variation-settings: "SOFT" 100, "opsz" 144;
+  }
+  .preview-C .badge {
+    position: absolute; top: 40px; right: 20px;
+    padding: 6px 10px; background: #FCFAF3; border: 1px solid #D4CFC1;
+    border-radius: 4px;
+    font-family: 'Geist Mono', monospace; font-size: 9px;
+    color: #1A3B8F; letter-spacing: 0.1em;
+  }
+  .preview-C .tag {
+    position: absolute; top: 16px; left: 16px;
+    font-family: 'Geist Mono', monospace; font-size: 9px;
+    color: #7B7B85; letter-spacing: 0.15em; text-transform: uppercase;
+  }
+  .preview-C .apricot {
+    position: absolute; top: 0; right: 0;
+    width: 40px; height: 40px; background: #E8916D;
+    clip-path: polygon(100% 0, 100% 100%, 0 0);
+  }
+
+  .concept-body {
+    padding: 24px 24px 28px;
+    display: flex; flex-direction: column; gap: 14px;
+    flex: 1;
+  }
+  .concept-tag {
+    font-family: 'Geist Mono', monospace;
+    font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--muted);
+    display: flex; align-items: center; gap: 8px;
+  }
+  .concept-tag .swatch {
+    width: 12px; height: 12px; border-radius: 3px;
+  }
+  .concept-name {
+    font-family: 'Fraunces', serif; font-weight: 400;
+    font-size: 32px; line-height: 1.1; letter-spacing: -0.02em;
+  }
+  .concept-name em { font-style: italic; }
+  .concept-desc { font-size: 14px; color: var(--ink-2); line-height: 1.6; }
+  .concept-tags {
+    display: flex; flex-wrap: wrap; gap: 6px; margin-top: 4px;
+  }
+  .chip {
+    padding: 4px 10px; font-family: 'Geist Mono', monospace;
+    font-size: 10px; letter-spacing: 0.05em;
+    background: var(--bg); color: var(--ink-2);
+    border: 1px solid var(--line); border-radius: 999px;
+  }
+  .concept-cta {
+    margin-top: auto; padding-top: 20px;
+    display: flex; justify-content: space-between; align-items: center;
+    border-top: 1px dashed var(--line);
+  }
+  .concept-cta .view {
+    display: inline-flex; align-items: center; gap: 8px;
+    font-family: 'Geist Mono', monospace; font-size: 11px;
+    color: var(--ink); letter-spacing: 0.05em;
+    padding: 8px 14px; border: 1px solid var(--ink); border-radius: 999px;
+    transition: all .3s;
+  }
+  .concept-card:hover .concept-cta .view {
+    background: var(--ink); color: var(--paper);
+    padding-left: 18px;
+  }
+  .concept-cta .num {
+    font-family: 'Fraunces', serif; font-style: italic; font-size: 22px;
+    color: var(--muted); font-weight: 300;
+    font-variation-settings: "SOFT" 100;
+  }
+
+  /* deploy section */
+  .deploy {
+    margin: 60px 6vw 80px;
+    padding: 48px;
+    background: var(--ink); color: var(--paper);
+    border-radius: 8px;
+    position: relative; z-index: 1;
+    overflow: hidden;
+  }
+  .deploy::before {
+    content: ''; position: absolute; inset: 0;
+    background:
+      radial-gradient(ellipse at 20% 20%, rgba(26,59,143,.35), transparent 50%),
+      radial-gradient(ellipse at 80% 80%, rgba(232,145,109,.12), transparent 50%);
+    pointer-events: none;
+  }
+  .deploy-inner { position: relative; z-index: 1; }
+  .deploy-eyebrow {
+    font-family: 'Geist Mono', monospace; font-size: 10px;
+    letter-spacing: 0.2em; text-transform: uppercase;
+    color: #E8916D; margin-bottom: 16px;
+  }
+  .deploy h2 {
+    font-family: 'Fraunces', serif; font-weight: 300;
+    font-size: clamp(36px, 4vw, 60px);
+    line-height: 1.05; letter-spacing: -0.02em; color: var(--paper);
+    margin-bottom: 40px;
+    font-variation-settings: "SOFT" 30, "opsz" 144;
+    max-width: 24ch;
+  }
+  .deploy h2 em {
+    font-style: italic;
+    background: linear-gradient(135deg, #E8916D, #F5B896);
+    -webkit-background-clip: text; background-clip: text;
+    color: transparent;
+    font-variation-settings: "SOFT" 100, "opsz" 144;
+  }
+  .deploy-steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+  .step {
+    padding: 24px;
+    background: rgba(255,255,255,.05);
+    border: 1px solid rgba(255,255,255,.15);
+    border-radius: 6px;
+  }
+  .step-num {
+    font-family: 'Fraunces', serif; font-weight: 300;
+    font-size: 48px; line-height: 1; font-style: italic;
+    color: #E8916D;
+    font-variation-settings: "SOFT" 100, "opsz" 144;
+    margin-bottom: 20px;
+  }
+  .step h3 {
+    font-family: 'Fraunces', serif; font-size: 20px; line-height: 1.2;
+    color: var(--paper); margin-bottom: 12px; font-weight: 400;
+  }
+  .step p { font-size: 13px; line-height: 1.65; color: rgba(255,255,255,.7); }
+  .step code {
+    display: block; margin-top: 12px;
+    padding: 8px 12px; background: rgba(0,0,0,.3);
+    border: 1px solid rgba(255,255,255,.1); border-radius: 4px;
+    font-family: 'Geist Mono', monospace; font-size: 11px;
+    color: #E8916D; letter-spacing: 0.02em;
+  }
+
+  footer {
+    padding: 20px 6vw 40px;
+    display: flex; justify-content: space-between;
+    font-family: 'Geist Mono', monospace; font-size: 10px;
+    color: var(--muted); letter-spacing: 0.15em; text-transform: uppercase;
+    position: relative; z-index: 1;
+  }
+
+  @media (max-width: 900px) {
+    .concepts, .deploy-steps { grid-template-columns: 1fr; }
+    .concept-preview { height: 240px; }
+    .preview-A .big, .preview-B .big, .preview-C .big { font-size: 64px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="top">
+  <div class="brand">ILSUK.KIM · PORTFOLIO</div>
+  <div>Concept review · 2026.08</div>
+</div>
+
+<header>
+  <div class="eyebrow">Portfolio concept review · 3 directions</div>
+  <h1>세 개의 방향.<br/><em>고르시고, 섞으셔도 됩니다.</em></h1>
+  <p class="lede">
+    <strong>따뜻한 오프화이트 + 세리프</strong>라는 큰 방향은 세 안 모두 같습니다.
+    다른 것은 액센트 컬러, 세부 타이포, 인터랙션의 성격입니다.
+    <strong>구조 · 콘텐츠 · 챕터 순서는 세 안이 동일</strong>하므로,
+    나중에 정하시는 안을 기반으로 세부 항목만 다듬어 완성하면 됩니다.
+  </p>
+</header>
+
+<div class="concepts">
+  <a class="concept-card" href="concept-a.html">
+    <div class="concept-preview preview-A">
+      <div class="tag"><span>01 / A</span><span>Terracotta</span></div>
+      <div class="big">Ilsuk<span class="ital">Kim.</span></div>
+    </div>
+    <div class="concept-body">
+      <div class="concept-tag"><span class="swatch" style="background:#C24B25"></span>A · Warm Terracotta</div>
+      <div class="concept-name">Warm <em>craftsman</em></div>
+      <div class="concept-desc">
+        따뜻한 크림 배경에 테라코타 오렌지. Fraunces 세리프의 이탤릭이 헤드라인마다 등장합니다.
+        20년 시니어의 <em>장인정신</em>과 신뢰감. 커서가 액센트 컬러 도트로 따라다닙니다.
+      </div>
+      <div class="concept-tags">
+        <span class="chip">Fraunces</span>
+        <span class="chip">#C24B25</span>
+        <span class="chip">Dot cursor</span>
+        <span class="chip">Warm</span>
+      </div>
+      <div class="concept-cta">
+        <span class="view">View concept →</span>
+        <span class="num">01.</span>
+      </div>
+    </div>
+  </a>
+
+  <a class="concept-card" href="concept-b.html">
+    <div class="concept-preview preview-B">
+      <div class="tag"><span>02 / B</span><span>Deep Forest</span></div>
+      <div class="big">Ilsuk <span class="ital">Kim</span></div>
+      <div class="badge">Available for hire</div>
+    </div>
+    <div class="concept-body">
+      <div class="concept-tag"><span class="swatch" style="background:#2F5D3F"></span>B · Deep Forest</div>
+      <div class="concept-name">Documented <em>senior</em></div>
+      <div class="concept-desc">
+        차분한 오프화이트에 딥 포레스트 그린. EB Garamond 세리프의 챕터 북 구조.
+        좌측 목차 레일, 상단 챕터 배지, 스포트라이트 커서. <em>컨설팅·엔터프라이즈</em> 감성.
+      </div>
+      <div class="concept-tags">
+        <span class="chip">EB Garamond</span>
+        <span class="chip">#2F5D3F</span>
+        <span class="chip">TOC rail</span>
+        <span class="chip">Editorial</span>
+      </div>
+      <div class="concept-cta">
+        <span class="view">View concept →</span>
+        <span class="num">02.</span>
+      </div>
+    </div>
+  </a>
+
+  <a class="concept-card" href="concept-c.html">
+    <div class="concept-preview preview-C">
+      <div class="apricot"></div>
+      <div class="tag"><span>03 / C</span></div>
+      <div class="badge">§01 / 13</div>
+      <div class="big">Ilsuk<span class="ital">Kim.</span></div>
+    </div>
+    <div class="concept-body">
+      <div class="concept-tag">
+        <span class="swatch" style="background:#1A3B8F"></span>
+        <span class="swatch" style="background:#E8916D"></span>
+        C · Ink Cobalt + Apricot
+      </div>
+      <div class="concept-name">Technical <em>global</em></div>
+      <div class="concept-desc">
+        은은한 격자 그리드에 잉크 코발트 + 살구 액센트. 챕터 §, 스테이터스 필,
+        모노스페이스 UI. 커서에는 “VISIT →” 같은 라벨이 붙습니다. <em>글로벌 AI 회사</em> 타겟에 가장 적합.
+      </div>
+      <div class="concept-tags">
+        <span class="chip">Fraunces + Newsreader</span>
+        <span class="chip">#1A3B8F</span>
+        <span class="chip">Labeled cursor</span>
+        <span class="chip">Grid UI</span>
+      </div>
+      <div class="concept-cta">
+        <span class="view">View concept →</span>
+        <span class="num">03.</span>
+      </div>
+    </div>
+  </a>
+</div>
+
+<section class="deploy">
+  <div class="deploy-inner">
+    <div class="deploy-eyebrow">Next step · GitHub + Railway</div>
+    <h2>선택하시면,<br/><em>배포까지</em> 정리해 드립니다.</h2>
+    <div class="deploy-steps">
+      <div class="step">
+        <div class="step-num">01</div>
+        <h3>선택 & 다듬기</h3>
+        <p>
+          세 안 중 하나를 고르시거나, 특정 요소만 골라 섞으셔도 됩니다.
+          도메인, 실사진, OG 이미지, 추가 프로젝트 상세 등 남은 콘텐츠를 채웁니다.
+        </p>
+      </div>
+      <div class="step">
+        <div class="step-num">02</div>
+        <h3>GitHub 저장소</h3>
+        <p>
+          정적 HTML + <code>shared/content.js</code> 구조라, 그대로 push하면 됩니다.
+          별도 빌드 스텝이 필요하면 <code>package.json</code>을 추가합니다.
+        </p>
+        <code>git init · git push origin main</code>
+      </div>
+      <div class="step">
+        <div class="step-num">03</div>
+        <h3>Railway 호스팅</h3>
+        <p>
+          Railway에서 저장소를 연결하면 자동 배포됩니다.
+          정적이라면 Nixpacks가 자동 감지하고, 커스텀 도메인을 붙일 수 있습니다.
+        </p>
+        <code>railway up · custom domain</code>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <span>© 2026 Jasmine Kim</span>
+  <span>Portfolio Concept Review · v1.0</span>
+</footer>
+
+</body>
+</html>

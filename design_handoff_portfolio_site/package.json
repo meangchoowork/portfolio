@@ -1,0 +1,16 @@
+{
+  "name": "ilsuk-kim-portfolio",
+  "version": "1.0.0",
+  "description": "Ilsuk Kim — Forward Deployed AI Engineer / Technical PM portfolio.",
+  "private": true,
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "express": "^4.19.2"
+  }
+}
