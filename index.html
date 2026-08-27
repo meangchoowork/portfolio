@@ -20,6 +20,9 @@
     --accent: #2F5D3F;        /* deep forest */
     --accent-hi: #4A7D5C;
     --accent-tint: rgba(47,93,63,.08);
+    --content-max: 1200px;
+    --content-gutter: clamp(64px, 6vw, 96px);
+    --content-inline: max(var(--content-gutter), calc((100vw - var(--content-max)) / 2));
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
   html, body {
@@ -105,7 +108,7 @@
 
   /* ——— section base ——— */
   section {
-    min-height: 100vh; padding: 120px 12vw 100px 14vw;
+    min-height: 100vh; padding: 120px var(--content-inline) 100px;
     display: flex; flex-direction: column; justify-content: center;
     position: relative;
   }
@@ -302,7 +305,7 @@
   #vc {
     background: var(--ink);
     color: var(--paper);
-    padding: 140px 12vw 140px 14vw;
+    padding: 140px var(--content-inline);
   }
   #vc::before {
     content: ''; position: absolute; inset: 0;
@@ -551,7 +554,7 @@
   #contact {
     background: var(--ink); color: var(--paper);
     align-items: center; text-align: center;
-    padding: 140px 12vw;
+    padding: 140px var(--content-inline);
   }
   #contact::before {
     content: ''; position: absolute; inset: 0;
@@ -588,14 +591,16 @@
   }
   .contact-item .lbl { color: rgba(248,245,235,.5); font-size: 10px; text-transform: uppercase; letter-spacing: 0.2em; }
   .contact-footer {
-    position: absolute; bottom: 40px; left: 12vw; right: 12vw;
+    position: absolute; bottom: 40px; left: var(--content-inline); right: var(--content-inline);
     display: flex; justify-content: space-between;
     font-family: 'Pretendard Variable', 'Pretendard', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', sans-serif; font-size: 10px;
     color: rgba(248,245,235,.4); letter-spacing: 0.15em; text-transform: uppercase;
   }
 
   @media (max-width: 900px) {
-    section { padding: 100px 6vw 80px; }
+    :root { --content-gutter: 6vw; }
+    section { padding-top: 100px; padding-bottom: 80px; }
+    #vc, #contact { padding-top: 100px; padding-bottom: 80px; }
     .hero-body, .vc-hero, .sam-hero { grid-template-columns: 1fr; gap: 40px; }
     .stats { grid-template-columns: 1fr 1fr; }
     .stat { border-right: none; border-bottom: 1px solid var(--line); }
