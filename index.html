@@ -707,13 +707,11 @@
 
     .built-sub { margin-bottom: 32px; }
     .built-marquee {
-      overflow-x: auto;
-      overscroll-behavior-inline: contain;
+      overflow: hidden;
       -webkit-mask-image: none;
       mask-image: none;
-      scrollbar-width: thin;
     }
-    .built-track { animation: none; will-change: auto; }
+    .built-track { animation: built-slide 60s linear infinite; will-change: transform; }
     .built-card { flex-basis: min(280px, calc(100vw - 64px)); }
 
     .ent-row {
