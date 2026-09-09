@@ -476,7 +476,7 @@ window.PORTFOLIO_CONTENT = {
       { ko: 'PMP (수료)', en: 'PMP (Completed)' },
       { ko: 'Co-Active Coaching (수료)', en: 'Co-Active Coaching (Completed)' },
       { ko: 'SAP Hybris Commerce Essentials (수료)', en: 'SAP Hybris Commerce Essentials (Completed)' },
-      { ko: '직업능력개발훈련교사 3급', en: 'Vocational Training Instructor Level 3' },
+      { ko: '직업능력개발훈련교사 3급', en: '<strong>Vocational Competency Development Training Instructor, Level 3</strong><span class="edu-detail">Ministry of Employment and Labor (MOEL), Republic of Korea</span>' },
     ],
     languages: [
       { ko: '한국어 (모국어)', en: 'Korean (Native)' },

@@ -639,6 +639,8 @@
     display: flex; justify-content: space-between; align-items: baseline; gap: 20px;
   }
   .edu-item .name { font-family: 'Pretendard Variable', 'Pretendard', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', sans-serif; font-size: 17px; font-weight: 400; }
+  .edu-item .name strong { display: block; font-weight: 600; }
+  .edu-item .edu-detail { display: block; margin-top: 6px; font-size: 12px; line-height: 1.4; color: var(--muted); }
   .edu-item .meta { font-family: 'Pretendard Variable', 'Pretendard', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', sans-serif; font-size: 10px; color: var(--muted); letter-spacing: 0.1em; }
 
   /* ——— contact ——— */
@@ -885,7 +887,7 @@
       <button data-lang="ko" class="active">KO</button>
       <button data-lang="en">EN</button>
     </span>
-    <a class="pdf-download" id="pdfDownload" href="assets/ILSUK_CV_KR_20260908.pdf" download="ILSUK_CV.pdf">PDF Download</a>
+    <a class="pdf-download" id="pdfDownload" href="assets/ILSUK_CV_KR_20260908.pdf" download="ILSUK_CV.pdf">CV Download</a>
   </div>
 </div>
 
@@ -917,7 +919,7 @@
     { id: 'samsung',     num: '08', title: { ko: '삼성SDS', en: 'Samsung SDS' } },
     { id: 'stack',       num: '09', title: { ko: '스택', en: 'Stack' } },
     { id: 'vc',          num: '10', title: { ko: 'VC-Framework', en: 'VC-Framework' } },
-    { id: 'education',   num: '11', title: { ko: '자격·언어', en: 'Credentials' } },
+    { id: 'education',   num: '11', title: { ko: '자격·언어', en: 'Training & Languages' } },
     { id: 'contact',     num: '12', title: { ko: '연락', en: 'Contact' } },
   ];
 
@@ -1164,11 +1166,11 @@
     const certs = C.education.certs.map(c => `<div class="edu-item"><span class="name">${t(c)}</span></div>`).join('');
     const langs = C.education.languages.map(l => `<div class="edu-item"><span class="name">${t(l)}</span></div>`).join('');
     return `
-      <section id="education" data-chapter="11" data-screen-label="11 Credentials">
-        <div class="kicker" data-num="11">${lang==='ko'?'자격 · 언어':'Credentials'}</div>
-        <h2 class="edu-heading">${lang==='ko'?'자격과 <em>언어</em>.':'Certifications & <em>languages</em>.'}</h2>
+      <section id="education" data-chapter="11" data-screen-label="11 Training & Languages">
+        <div class="kicker" data-num="11">${lang==='ko'?'자격 · 언어':'Training & Languages'}</div>
+        <h2 class="edu-heading">${lang==='ko'?'자격과 <em>언어</em>.':'Training & <em>languages</em>.'}</h2>
         <div class="edu-grid edu-grid-2">
-          <div class="edu-block"><h4>${lang==='ko'?'자격 · 인증':'Certifications'}</h4>${certs}</div>
+          <div class="edu-block"><h4>${lang==='ko'?'자격 · 인증':'Completed Training'}</h4>${certs}</div>
           <div class="edu-block"><h4>${lang==='ko'?'언어':'Languages'}</h4>${langs}</div>
         </div>
       </section>
