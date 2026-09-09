@@ -191,6 +191,17 @@
     font-size: clamp(72px, 12vw, 200px);
     line-height: 0.9; letter-spacing: -0.02em;
   }
+  .hero-name.is-en {
+    flex-shrink: 0;
+    font-size: clamp(72px, 10vw, 160px);
+    white-space: nowrap;
+  }
+  .hero-legal-name {
+    margin-top: 18px;
+    font-size: 13px; font-weight: 500; line-height: 1;
+    letter-spacing: .16em; text-transform: uppercase;
+    color: var(--muted);
+  }
   .hero-name .italic { font-style: italic; color: var(--accent); }
   .hero-badge {
     padding: 10px 18px; border: 1px solid var(--accent); border-radius: 999px;
@@ -333,6 +344,7 @@
     appearance: none; width: 100%; min-height: 240px;
     grid-row: 1;
     display: flex; flex-direction: column; align-items: flex-start;
+    position: relative;
     padding: 28px; border: 1px solid var(--line); border-radius: 4px;
     background: transparent; color: var(--ink); text-align: left; cursor: pointer;
     transition: background .25s, border-color .25s, transform .25s;
@@ -344,6 +356,17 @@
   .problem-card-tag { font-size: 10px; letter-spacing: .16em; margin-bottom: 14px; color: var(--accent); }
   .problem-card.active .problem-card-tag { color: var(--paper); opacity: .72; }
   .problem-card.is-failure.active .problem-card-tag { color: var(--accent); opacity: 1; }
+  .problem-case-badge {
+    position: absolute; top: 20px; right: 20px;
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 6px 9px; border: 1px solid var(--line); border-radius: 999px;
+    font-size: 10px; font-weight: 600; line-height: 1;
+    letter-spacing: .06em; white-space: nowrap;
+    color: var(--accent); background: rgba(248,245,235,.72);
+  }
+  .problem-card.active .problem-case-badge { border-color: rgba(248,245,235,.38); color: var(--paper); background: rgba(248,245,235,.1); }
+  .problem-card.is-failure .problem-case-badge { color: #6d6357; }
+  .problem-card.is-failure.active .problem-case-badge { border-color: #b8b9b3; color: #61594f; background: rgba(255,255,255,.45); }
   .problem-card-title { font-size: clamp(24px, 2.3vw, 34px); line-height: 1.1; white-space: pre-line; word-break: keep-all; }
   .problem-card-summary { margin-top: auto; padding-top: 28px; font-size: 13px; opacity: .72; }
   .problem-panel {
@@ -715,6 +738,8 @@
     .hero-marks { margin-bottom: 40px; font-size: 9px; }
     .hero-name-row { gap: 24px; margin-bottom: 40px; }
     .hero-name { font-size: clamp(60px, 19vw, 72px); }
+    .hero-name.is-en { font-size: clamp(48px, 15vw, 64px); }
+    .hero-legal-name { margin-top: 12px; font-size: 11px; letter-spacing: .12em; }
     .hero-badge { padding: 8px 12px; font-size: 11px; letter-spacing: .1em; }
     .hero-body { gap: 32px; padding-top: 32px; }
     .hero-position-full { font-size: 18px; }
@@ -779,6 +804,7 @@
     .problem-cards { grid-template-columns: 1fr; }
     .problem-entry { display: block; }
     .problem-card { min-height: 200px; padding: 24px; }
+    .problem-case-badge { top: 18px; right: 18px; }
     .problem-card-no { margin-bottom: 24px; }
     .problem-panel {
       grid-template-columns: 1fr; gap: 24px;
@@ -879,7 +905,10 @@
           <span>Volume I</span>
         </div>
         <div class="hero-name-row">
-          <div class="hero-name">${isKo?'김일석':'Jasmine <span class="italic">Kim</span>'}</div>
+          <div class="hero-identity">
+            <div class="hero-name${isKo ? '' : ' is-en'}">${isKo?'김일석':'Jasmine <span class="italic">Kim</span>'}</div>
+            ${isKo ? '' : '<div class="hero-legal-name">(Legal name: ILSUK, KIM)</div>'}
+          </div>
           <div class="hero-badge">Open to roles &amp; projects</div>
         </div>
         <div class="hero-body">
@@ -946,6 +975,7 @@
     const cards = C.problemSolving.items.map((item, index) => `
       <div class="problem-entry">
         <button class="problem-card${item.story.learning ? ' is-failure' : ''}${initialOpen && index === 0 ? ' active' : ''}" type="button" data-story="${index}" aria-expanded="${initialOpen && index === 0}">
+          <span class="problem-case-badge" aria-label="${item.story.learning ? (lang === 'ko' ? '실패 및 학습 사례' : 'Failure and learning case') : (lang === 'ko' ? '성공 사례' : 'Success case')}">${item.story.learning ? (lang === 'ko' ? '↻ 실패·학습 사례' : '↻ Failure & learning') : (lang === 'ko' ? '✓ 성공 사례' : '✓ Success case')}</span>
           <span class="problem-card-no">${item.no}</span>
           <span class="problem-card-tag">${t(item.tag)}</span>
           <span class="problem-card-title">${t(item.title)}</span>
