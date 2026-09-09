@@ -100,6 +100,15 @@
     font-size: 10px; letter-spacing: 0.1em; color: var(--muted);
   }
   .lang-toggle button.active { background: var(--ink); color: var(--paper); }
+  .pdf-download {
+    display: inline-flex; align-items: center; justify-content: center;
+    padding: 5px 10px; border: 1px solid var(--line); border-radius: 4px;
+    background: var(--paper); color: var(--ink-2); text-decoration: none;
+    font-size: 10px; letter-spacing: 0.1em; white-space: nowrap;
+    transition: border-color .2s ease, color .2s ease, background-color .2s ease;
+  }
+  .pdf-download:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-tint); }
+  .pdf-download:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 
   /* ——— left rail: table of contents ——— */
   .toc {
@@ -652,6 +661,10 @@
     line-height: 0.95; color: var(--paper);
     margin-bottom: 40px;
   }
+  :lang(en) .contact-heading {
+    font-size: clamp(56px, 7vw, 112px);
+    white-space: nowrap;
+  }
   .contact-heading em { color: var(--accent-hi); font-style: italic; }
   .contact-body {
     font-family: 'Pretendard Variable', 'Pretendard', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', sans-serif; font-size: 24px; line-height: 1.5;
@@ -729,7 +742,8 @@
     }
     .chrome .brand { font-size: 10px; }
     .chrome .center { display: none; }
-    .chrome .right { grid-column: 2; }
+    .chrome .right { grid-column: 2; gap: 8px; }
+    .pdf-download { padding: 5px 8px; font-size: 9px; letter-spacing: .06em; }
 
     section, #vc, #contact { padding-top: 64px; padding-bottom: 64px; }
     #hero { padding-top: 80px; padding-bottom: 64px; }
@@ -761,6 +775,10 @@
     .contact-heading {
       font-size: clamp(40px, 12vw, 48px);
       line-height: 1.05;
+    }
+    :lang(en) .contact-heading {
+      font-size: clamp(40px, 12vw, 48px);
+      white-space: normal;
     }
     .sam-heading {
       font-size: clamp(34px, 10vw, 40px);
@@ -867,6 +885,7 @@
       <button data-lang="ko" class="active">KO</button>
       <button data-lang="en">EN</button>
     </span>
+    <a class="pdf-download" id="pdfDownload" href="assets/ILSUK_CV_KR_20260908.pdf" download="ILSUK_CV.pdf">PDF Download</a>
   </div>
 </div>
 
@@ -880,6 +899,12 @@
   const C = window.PORTFOLIO_CONTENT;
   let lang = localStorage.getItem('ilsuk_lang') || 'ko';
   const t = (v) => (v && typeof v === 'object' && (v.ko || v.en)) ? (v[lang] || v.ko || v.en) : v;
+  const updatePdfDownload = () => {
+    const link = document.getElementById('pdfDownload');
+    link.href = lang === 'ko'
+      ? 'assets/ILSUK_CV_KR_20260908.pdf'
+      : 'assets/ILSUK_CV_EN_20260908.pdf';
+  };
 
   const CHAPTERS = [
     { id: 'hero',        num: '01', title: { ko: '표지', en: 'Cover' } },
@@ -1246,12 +1271,14 @@
       localStorage.setItem('ilsuk_lang', lang);
       document.querySelectorAll('.lang-toggle button').forEach(b => b.classList.toggle('active', b.dataset.lang === lang));
       document.documentElement.lang = lang === 'ko' ? 'ko' : 'en';
+      updatePdfDownload();
       render(); updateChapter();
     });
   });
 
   document.querySelectorAll('.lang-toggle button').forEach(b => b.classList.toggle('active', b.dataset.lang === lang));
   document.documentElement.lang = lang === 'ko' ? 'ko' : 'en';
+  updatePdfDownload();
   render();
   updateChapter();
 })();
