@@ -116,6 +116,65 @@ window.PORTFOLIO_CONTENT = {
     ],
   },
 
+  problemSolving: {
+    kicker: { ko: 'Problem solving', en: 'Problem solving' },
+    heading: { ko: '문제해결능력', en: 'Problem-solving capabilities.' },
+    items: [
+      {
+        no: '01',
+        tag: { ko: 'PROJECT RECOVERY', en: 'PROJECT RECOVERY' },
+        title: { ko: '3개월 지연 프로젝트\n정상화', en: 'Recovering a project\n3 months behind' },
+        summary: { ko: '그린카 차세대 카셰어링 앱', en: 'Greencar next-gen carsharing app' },
+        story: {
+          problem: { ko: '오픈 일정이 3개월 이상 지연된 차세대 카셰어링 앱.', en: 'A next-generation carsharing app running more than three months behind schedule.' },
+          role: { ko: '앱 PM · Testing Manager', en: 'App PM · Testing Manager' },
+          action: { ko: '이슈 현황 분석 → 당장 해결 가능 이슈, 리스크 최소화 계획 수립 → 이슈 해결 계획 실행 → 개발·QA 일정 통합 → 품질관리 체계 수립', en: 'Analyzed issue status → identified immediately solvable issues and established a risk-minimization plan → executed the issue resolution plan → integrated development and QA schedules → established quality control.' },
+          result: { ko: '지연된 일정에 대하여 오픈 일정을 확정하고 서비스 정상화를 위한 안정화 운영 전환.', en: 'Confirmed a launch date for the delayed schedule and transitioned to stabilization operations to normalize the service.' },
+        },
+      },
+      {
+        no: '02',
+        tag: { ko: 'CHANGE CONTROL', en: 'CHANGE CONTROL' },
+        title: { ko: '테스트 단계에 고객의\n추가 요구사항 발생', en: 'Additional client requests\narising during testing' },
+        summary: { ko: '추가 요구사항 · 영향 분석 · 단계적 반영', en: 'New requests · Impact analysis · Staged delivery' },
+        story: {
+          problem: { ko: '테스트 단계에서 일정·범위에 영향을 주는 고객의 무리한 추가 요구사항 발생.', en: 'During testing, the client raised excessive additional requirements that affected the schedule and scope.' },
+          role: { ko: 'Project Manager', en: 'Project Manager' },
+          action: { ko: '고객에게 어떤 가치가 있는지 확인 → 영향 분석 → 대안 제시 → 기존 목표·요구사항 비교 → 우선순위 결정 → 작은 변경으로 단계적 반영', en: 'Validate customer value → analyze impact → propose alternatives → compare against existing goals and requirements → prioritize → deliver incrementally through small changes.' },
+          result: { ko: '고객 가치를 유지하면서 기존 목표와 납기·예산을 지키는 범위로 변경사항을 단계적으로 반영.', en: 'Delivered changes incrementally within a scope that preserved customer value, existing goals, deadline, and budget.' },
+        },
+      },
+      {
+        no: '03',
+        tag: { ko: 'TEAM LEADERSHIP', en: 'TEAM LEADERSHIP' },
+        title: { ko: '팀원의 반복되는\n성과 저하 문제', en: 'Repeated performance\nissues within the team' },
+        summary: { ko: '소통으로 연결하고 성과로 이끄는 리더십', en: 'Leadership that connects through communication and drives performance' },
+        story: {
+          problem: { ko: '특정 팀원이 반복적으로 업무를 지연시키거나 근무 태도가 좋지 않아 프로젝트 일정과 팀워크에 영향 발생.', en: 'A team member repeatedly delayed work or demonstrated poor work discipline, affecting the project schedule and teamwork.' },
+          role: { ko: 'Project Manager · Team Leader', en: 'Project Manager · Team Leader' },
+          action: {
+            ko: '“역량이 떨어진다”고 평가하기보다 팀원과 충분히 소통하며 기대한 품질·일정과 현재 수준의 차이를 확인한다. 이후 역할과 목표를 함께 명확하게 재정의하고, 필요한 지원을 확인하여 개선계획을 합의한다. 계획 수립에 그치지 않고 꾸준히 소통하며 결과를 피드백하고, 팀의 목표와 연결될 수 있도록 팀원의 책임을 확인한다.\n\n이 과정에서 리더로서 세 가지를 점검한다. ① 약속한 업무를 품질 기준과 일정에 맞게 수행하는가 ② 역할·성과·책임이 명확하게 정의되어 있는가 ③ 문제나 실수를 숨기지 않고 도움을 요청하는가. 또한 팀원이 자연스럽게 소통할 수 있는 환경을 만드는 것을 중요하게 생각한다.',
+            en: 'Rather than labeling someone as lacking capability, communicate openly to identify the gap between expected quality and schedule and the current level of performance. Then redefine the role and goals together, identify the support needed, and agree on an improvement plan. Go beyond creating the plan by maintaining regular communication, providing feedback on results, and confirming accountability in connection with team goals.\n\nAs a leader, check three things throughout the process: ① Is the agreed work being completed to the expected quality and schedule? ② Are the person’s role, performance expectations, and responsibilities clearly defined? ③ Can they ask for help without hiding problems or mistakes? Creating an environment where team members can communicate naturally is equally important.',
+          },
+          result: { ko: '업무 수행과 근태에 대한 책임을 명확히 하고 팀 내 소통·협업을 회복하여, 프로젝트 일정과 품질을 안정적으로 관리.', en: 'Clarified accountability for delivery and attendance, restored team communication and collaboration, and stabilized project schedule and quality.' },
+        },
+      },
+      {
+        no: '04',
+        tag: { ko: 'FAILURE & LEARNING', en: 'FAILURE & LEARNING' },
+        title: { ko: '회복 일정을 과신한\n의료 프로젝트', en: 'Overestimating recovery\non a medical project' },
+        summary: { ko: '추정 실패에서 실행·검증 체계로', en: 'From estimation failure to execution discipline' },
+        story: {
+          problem: { ko: 'PM 없이 4개월 이상 지연된 의료 서비스 프로젝트에 정상화 PM으로 투입되었다. 과업 규모와 이해관계자 갈등을 충분히 파악하지 못한 상태에서 2개월 내 오픈을 약속했다.', en: 'Joined a medical service project that had run more than four months late without a PM. Committed to opening within two months before fully understanding the workload and stakeholder conflict.' },
+          role: { ko: 'Project Recovery PM · Product Manager', en: 'Project Recovery PM · Product Manager' },
+          action: { ko: '프로젝트 현황과 미완료 과업을 다시 분석하고 클라이언트·파트너사 간 쟁점을 조율하며 오픈을 추진했다. 그러나 미경험 서비스 도메인의 과업 규모를 정확히 추정하지 못했고, 이해관계자 갈등을 충분히 좁히지 못했으며, 파트너사의 개발 일정과 품질을 확실하게 관리하지 못했다.', en: 'Reassessed project status and unfinished work, coordinated issues between the client and partner, and pushed toward launch. However, I underestimated the workload in an unfamiliar service domain, did not sufficiently narrow stakeholder conflicts, and failed to establish firm control over the partner’s development schedule and quality.' },
+          result: { ko: '약속한 2개월 내 오픈 목표를 달성하지 못했다. 충분한 진단 없이 회복 일정을 먼저 확정한 판단과 소통 부족, 기존 요구사항에 대한 변경 관리 부족을 실패 원인으로 확인했다.', en: 'Did not meet the promised two-month launch target. I identified the premature recovery commitment, insufficient communication, and inadequate change control over the existing requirements as key causes.' },
+          learning: { ko: '프로젝트 착수 단계에서 이해관계자 간 R&R 및 의사결정 권한을 먼저 확인하고 정의한다. 단계별 실행·점검 항목과 완료 기준을 수립하고, 설계 단계에서는 요구사항 반영 여부를 함께 리뷰하고 합의한다. 일정 수립 시 도메인·과업·기술·파트너 역량을 확인하여, 리스크·이슈·의사결정 로그와 복수의 일정 시나리오를 기반으로 실행 가능한 일정을 제시한다.', en: 'At project initiation, I first identify and define stakeholder roles, responsibilities, and decision rights. I establish execution steps, review items, and completion criteria for each phase, and jointly review and agree on requirements coverage during design. When building the schedule, I assess the domain, workload, technology, and partner capability, then propose an executable schedule supported by risk, issue, and decision logs and multiple schedule scenarios.' },
+        },
+      },
+    ],
+  },
+
   vc: {
     kicker: { ko: 'VC-Framework', en: 'VC-Framework' },
     heading: {

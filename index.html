@@ -324,6 +324,39 @@
   }
   .cap-body { font-size: 14px; color: var(--muted); white-space: pre-line; line-height: 1.65; }
 
+  /* ——— problem solving stories ——— */
+  .problem-cards {
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px;
+  }
+  .problem-entry { display: contents; }
+  .problem-card {
+    appearance: none; width: 100%; min-height: 240px;
+    grid-row: 1;
+    display: flex; flex-direction: column; align-items: flex-start;
+    padding: 28px; border: 1px solid var(--line); border-radius: 4px;
+    background: transparent; color: var(--ink); text-align: left; cursor: pointer;
+    transition: background .25s, border-color .25s, transform .25s;
+  }
+  .problem-card:hover { transform: translateY(-3px); border-color: var(--accent); }
+  .problem-card.active { background: var(--accent); border-color: var(--accent); color: var(--paper); }
+  .problem-card.is-failure.active { background: #e3e3de; border-color: #c7c8c1; color: var(--ink); }
+  .problem-card-no { font-size: 14px; font-style: italic; opacity: .65; margin-bottom: 40px; }
+  .problem-card-tag { font-size: 10px; letter-spacing: .16em; margin-bottom: 14px; color: var(--accent); }
+  .problem-card.active .problem-card-tag { color: var(--paper); opacity: .72; }
+  .problem-card.is-failure.active .problem-card-tag { color: var(--accent); opacity: 1; }
+  .problem-card-title { font-size: clamp(24px, 2.3vw, 34px); line-height: 1.1; white-space: pre-line; word-break: keep-all; }
+  .problem-card-summary { margin-top: auto; padding-top: 28px; font-size: 13px; opacity: .72; }
+  .problem-panel {
+    display: none; grid-column: 1 / -1; grid-row: 2;
+    grid-template-columns: repeat(4, 1fr); gap: 28px;
+    border-top: 1px solid var(--ink); margin-top: 12px; padding-top: 36px;
+  }
+  .problem-panel.active { display: grid; animation: story-open .3s ease both; }
+  .problem-step-label { font-size: 10px; letter-spacing: .18em; color: var(--accent); margin-bottom: 14px; text-transform: uppercase; }
+  .problem-step-body { font-size: 16px; line-height: 1.6; word-break: keep-all; white-space: pre-line; }
+  .problem-step-learning { grid-column: 1 / -1; border-top: 1px solid var(--line); padding-top: 28px; }
+  @keyframes story-open { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; transform: none; } }
+
   /* ——— VC-Framework (big independent) ——— */
   #vc {
     background: var(--ink);
@@ -627,12 +660,11 @@
   #capabilities,
   #built,
   #samsung,
-  #education {
+  #vc {
     background: var(--bg-green);
   }
 
   #vc {
-    background: var(--bg);
     color: var(--ink);
   }
   #vc::before { background: none; }
@@ -661,6 +693,7 @@
     .built-card { flex: 0 0 280px; }
     .why-point, .cap-row, .ent-row { grid-template-columns: 60px 1fr; gap: 20px; }
     .why-point p, .cap-body, .ent-body { grid-column: 2; }
+    .problem-panel { grid-template-columns: 1fr 1fr; }
   }
 
   @media (max-width: 600px) {
@@ -743,6 +776,15 @@
     .cap-title, .cap-body { grid-column: 2; }
     .cap-title { font-size: 21px; }
 
+    .problem-cards { grid-template-columns: 1fr; }
+    .problem-entry { display: block; }
+    .problem-card { min-height: 200px; padding: 24px; }
+    .problem-card-no { margin-bottom: 24px; }
+    .problem-panel {
+      grid-template-columns: 1fr; gap: 24px;
+      margin: 0 0 24px; padding: 28px 4px 8px;
+    }
+
     .vc-hero, .sam-hero { gap: 32px; margin-bottom: 48px; }
     .vc-cert { font-size: 11px; letter-spacing: .06em; }
     .vc-badges { gap: 24px; margin-bottom: 48px; }
@@ -791,7 +833,7 @@
 <div class="chrome" id="chrome">
   <div class="brand">Jasmine Kim / Portfolio 2026</div>
   <div class="center">
-    <span class="chapter-badge"><em id="chapterNum">01</em>/<span id="chapterTotal">13</span></span>
+    <span class="chapter-badge"><em id="chapterNum">01</em>/<span id="chapterTotal">12</span></span>
     <span class="chapter-title" id="chapterTitle">Hero</span>
   </div>
   <div class="right">
@@ -806,7 +848,7 @@
 
 <main id="main"></main>
 
-<script src="shared/content.js?v=23"></script>
+<script src="shared/content.js?v=44"></script>
 <script>
 (function() {
   const C = window.PORTFOLIO_CONTENT;
@@ -818,13 +860,14 @@
     { id: 'vision',      num: '02', title: { ko: '비전', en: 'Vision' } },
     { id: 'why',         num: '03', title: { ko: '왜 나인가', en: 'Why me' } },
     { id: 'capabilities',num: '04', title: { ko: '핵심 역량', en: 'Capabilities' } },
-    { id: 'vc',          num: '05', title: { ko: 'VC-Framework', en: 'VC-Framework' } },
+    { id: 'problem-solving', num: '05', title: { ko: '문제해결능력', en: 'Problem solving' } },
     { id: 'built',       num: '06', title: { ko: '만든 서비스', en: 'Shipped' } },
     { id: 'enterprise',  num: '07', title: { ko: '엔터프라이즈', en: 'Enterprise' } },
     { id: 'samsung',     num: '08', title: { ko: '삼성SDS', en: 'Samsung SDS' } },
     { id: 'stack',       num: '09', title: { ko: '스택', en: 'Stack' } },
-    { id: 'education',   num: '10', title: { ko: '자격·언어', en: 'Credentials' } },
-    { id: 'contact',     num: '11', title: { ko: '연락', en: 'Contact' } },
+    { id: 'vc',          num: '10', title: { ko: 'VC-Framework', en: 'VC-Framework' } },
+    { id: 'education',   num: '11', title: { ko: '자격·언어', en: 'Credentials' } },
+    { id: 'contact',     num: '12', title: { ko: '연락', en: 'Contact' } },
   ];
 
   function renderHero() {
@@ -898,6 +941,35 @@
     `;
   }
 
+  function renderProblemSolving() {
+    const initialOpen = !window.matchMedia('(max-width: 600px)').matches;
+    const cards = C.problemSolving.items.map((item, index) => `
+      <div class="problem-entry">
+        <button class="problem-card${item.story.learning ? ' is-failure' : ''}${initialOpen && index === 0 ? ' active' : ''}" type="button" data-story="${index}" aria-expanded="${initialOpen && index === 0}">
+          <span class="problem-card-no">${item.no}</span>
+          <span class="problem-card-tag">${t(item.tag)}</span>
+          <span class="problem-card-title">${t(item.title)}</span>
+          <span class="problem-card-summary">${t(item.summary)}</span>
+        </button>
+        <div class="problem-panel${initialOpen && index === 0 ? ' active' : ''}" data-panel="${index}">
+          ${['problem', 'role', 'action', 'result', ...(item.story.learning ? ['learning'] : [])].map(key => `
+            <div class="problem-step${key === 'learning' ? ' problem-step-learning' : ''}">
+              <div class="problem-step-label">${key === 'role' ? 'My Role' : key}</div>
+              <div class="problem-step-body">${t(item.story[key])}</div>
+            </div>
+          `).join('')}
+        </div>
+      </div>
+    `).join('');
+    return `
+      <section id="problem-solving" data-chapter="05" data-screen-label="05 Problem solving">
+        <div class="kicker" data-num="05">${t(C.problemSolving.kicker)}</div>
+        <h2 class="cap-heading">${t(C.problemSolving.heading).replace(/문제해결|Problem-solving/g, m => `<em>${m}</em>`)}</h2>
+        <div class="problem-cards">${cards}</div>
+      </section>
+    `;
+  }
+
   function renderVC() {
     const badges = C.vc.badges.map(b => `
       <div class="vc-badge">
@@ -912,8 +984,8 @@
       </div>
     `).join('');
     return `
-      <section id="vc" data-chapter="05" data-screen-label="05 VC-Framework">
-        <div class="kicker" data-num="05">${t(C.vc.kicker)}</div>
+      <section id="vc" data-chapter="10" data-screen-label="10 VC-Framework">
+        <div class="kicker" data-num="10">${t(C.vc.kicker)}</div>
         <div class="vc-hero">
           <div>
             <h2 class="vc-title">${t(C.vc.heading).replace(/Vibe Coding/g, '<span class="italic">Vibe Coding</span>')}</h2>
@@ -1037,8 +1109,8 @@
     const certs = C.education.certs.map(c => `<div class="edu-item"><span class="name">${t(c)}</span></div>`).join('');
     const langs = C.education.languages.map(l => `<div class="edu-item"><span class="name">${t(l)}</span></div>`).join('');
     return `
-      <section id="education" data-chapter="10" data-screen-label="10 Credentials">
-        <div class="kicker" data-num="10">${lang==='ko'?'자격 · 언어':'Credentials'}</div>
+      <section id="education" data-chapter="11" data-screen-label="11 Credentials">
+        <div class="kicker" data-num="11">${lang==='ko'?'자격 · 언어':'Credentials'}</div>
         <h2 class="edu-heading">${lang==='ko'?'자격과 <em>언어</em>.':'Certifications & <em>languages</em>.'}</h2>
         <div class="edu-grid edu-grid-2">
           <div class="edu-block"><h4>${lang==='ko'?'자격 · 인증':'Certifications'}</h4>${certs}</div>
@@ -1050,9 +1122,8 @@
 
   function renderContact() {
     return `
-      <section id="contact" data-chapter="11" data-screen-label="11 Contact">
-        <div class="kicker" data-num="11">${t(C.contact.kicker)}</div>
-        <!-- contact remains chapter 13; total is still 13 including credentials -->
+      <section id="contact" data-chapter="12" data-screen-label="12 Contact">
+        <div class="kicker" data-num="12">${t(C.contact.kicker)}</div>
         <h2 class="contact-heading">${t(C.contact.heading).replace(/시작해 볼까요|get started/gi, m => `<em>${m}</em>`)}</h2>
         <div class="contact-body">${t(C.contact.body)}</div>
         <div class="contact-methods">
@@ -1077,13 +1148,30 @@
 
   function render() {
     document.getElementById('main').innerHTML = [
-      renderHero(), renderVision(), renderWhy(), renderCapabilities(),
-      renderVC(), renderBuilt(), renderEnterprise(),
-      renderSamsung(), renderStack(), renderEducation(), renderContact(),
+      renderHero(), renderVision(), renderWhy(), renderCapabilities(), renderProblemSolving(),
+      renderBuilt(), renderEnterprise(), renderSamsung(),
+      renderStack(), renderVC(), renderEducation(), renderContact(),
     ].join('');
     document.getElementById('toc').innerHTML = renderTOC();
     document.getElementById('chapterTotal').textContent = CHAPTERS.length.toString().padStart(2,'0');
     attachTocClicks();
+    attachProblemStories();
+  }
+
+  function attachProblemStories() {
+    const cards = document.querySelectorAll('.problem-card');
+    const panels = document.querySelectorAll('.problem-panel');
+    cards.forEach(card => card.addEventListener('click', () => {
+      const selected = card.dataset.story;
+      const isMobile = window.matchMedia('(max-width: 600px)').matches;
+      const shouldOpen = !isMobile || !card.classList.contains('active');
+      cards.forEach(item => {
+        const active = shouldOpen && item.dataset.story === selected;
+        item.classList.toggle('active', active);
+        item.setAttribute('aria-expanded', active);
+      });
+      panels.forEach(panel => panel.classList.toggle('active', shouldOpen && panel.dataset.panel === selected));
+    }));
   }
 
   function attachTocClicks() {
