@@ -1,2 +1,4 @@
 ignore/
 node_modules/
+data/access-count.json
+data/access-count.json.tmp

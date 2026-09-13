@@ -689,10 +689,11 @@
   .contact-item .lbl { color: rgba(248,245,235,.5); font-size: 10px; text-transform: uppercase; letter-spacing: 0.2em; }
   .contact-footer {
     position: static; width: 100%; margin-top: 60px;
-    display: flex; justify-content: space-between;
+    display: flex; justify-content: flex-start; align-items: center; gap: 14px;
     font-family: 'Pretendard Variable', 'Pretendard', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', sans-serif; font-size: 10px;
     color: rgba(248,245,235,.4); letter-spacing: 0.15em; text-transform: uppercase;
   }
+  .access-count::before { content: '·'; margin-right: 14px; }
 
   #vision,
   #capabilities,
@@ -1188,6 +1189,7 @@
         </div>
         <div class="contact-footer">
           <span>© 2026 Jasmine Kim</span>
+          <span class="access-count" id="accessCount" aria-label="오늘 접속 수 / 누적 접속 수" aria-live="polite">— / —</span>
         </div>
       </section>
     `;
@@ -1213,6 +1215,27 @@
     document.getElementById('chapterTotal').textContent = CHAPTERS.length.toString().padStart(2,'0');
     attachTocClicks();
     attachProblemStories();
+    updateAccessCountDisplay();
+  }
+
+  let accessCount = null;
+  function updateAccessCountDisplay() {
+    const element = document.getElementById('accessCount');
+    if (!element || !accessCount) return;
+    const locale = lang === 'ko' ? 'ko-KR' : 'en-US';
+    element.textContent = `${accessCount.today.toLocaleString(locale)} / ${accessCount.total.toLocaleString(locale)}`;
+    element.setAttribute('aria-label', lang === 'ko' ? '오늘 접속 수 / 누적 접속 수' : 'Today access count / total access count');
+  }
+
+  async function recordAccess() {
+    try {
+      const response = await fetch('/api/access-count', { method: 'POST', cache: 'no-store' });
+      if (!response.ok) throw new Error(`HTTP ${response.status}`);
+      accessCount = await response.json();
+      updateAccessCountDisplay();
+    } catch (error) {
+      console.warn('Access count is unavailable:', error);
+    }
   }
 
   function attachProblemStories() {
@@ -1283,6 +1306,7 @@
   updatePdfDownload();
   render();
   updateChapter();
+  recordAccess();
 })();
 </script>
 
