@@ -47,3 +47,5 @@ screenshots/sites/*.jpg -filter -diff -merge -text
 assets/og-image.png -filter -diff -merge -text
 assets/ILSUK_CV_KR_20260908.pdf -filter -diff -merge -text
 assets/ILSUK_CV_EN_20260908.pdf -filter -diff -merge -text
+ILSUK.KIM_CV.pdf -filter -diff -merge -text
+김일석_CV.pdf -filter -diff -merge -text

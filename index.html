@@ -888,7 +888,7 @@
       <button data-lang="ko" class="active">KO</button>
       <button data-lang="en">EN</button>
     </span>
-    <a class="pdf-download" id="pdfDownload" href="assets/ILSUK_CV_KR_20260908.pdf" download="ILSUK_CV.pdf">CV Download</a>
+    <a class="pdf-download" id="pdfDownload" href="김일석_CV.pdf" download="김일석_CV.pdf">CV Download</a>
   </div>
 </div>
 
@@ -902,11 +902,15 @@
   const C = window.PORTFOLIO_CONTENT;
   let lang = localStorage.getItem('ilsuk_lang') || 'ko';
   const t = (v) => (v && typeof v === 'object' && (v.ko || v.en)) ? (v[lang] || v.ko || v.en) : v;
+  const CV_FILES = {
+    ko: { href: '김일석_CV.pdf', filename: '김일석_CV.pdf' },
+    en: { href: 'ILSUK.KIM_CV.pdf', filename: 'ILSUK.KIM_CV.pdf' },
+  };
   const updatePdfDownload = () => {
     const link = document.getElementById('pdfDownload');
-    link.href = lang === 'ko'
-      ? 'assets/ILSUK_CV_KR_20260908.pdf'
-      : 'assets/ILSUK_CV_EN_20260908.pdf';
+    const file = CV_FILES[lang] || CV_FILES.ko;
+    link.href = file.href;
+    link.download = file.filename;
   };
 
   const CHAPTERS = [
